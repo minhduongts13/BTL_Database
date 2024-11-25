@@ -1,0 +1,125 @@
+/* For PC  */
+@media (min-width: 64em) {
+    #header #mobile-menu {
+        display: none;
+    }
+}
+
+/* For mobile and tablet */
+@media (max-width: 63.9375em){
+    #header #nav .subnav a {
+        padding: 5px 12px;
+    }
+
+    #content .places-list .buy-button {
+        padding: 15px 16px;
+    }
+
+    #content .form-control {
+        padding: 15px;
+        font-size: 16px;
+    }
+
+    #footer .socials-list > a{
+        font-size: 40px;
+        margin: 0 8px;
+    }
+
+    #footer .copyright > a {
+        padding: 12px 0;
+    }
+
+}
+
+/* For tablet */
+@media (min-width: 46.25em) and (max-width: 63.9375em) {
+    #header #mobile-menu {
+        display: none;
+    }
+
+    #content .contact-info {
+        line-height: 2;
+    }
+}
+
+/* For mobile  */
+@media (max-width: 46.1875em) {
+    .s-full-width,
+    .s-one-col {
+        width: 100%;
+    }
+
+    .s-mt-8px {
+        margin-top: 8px;
+    }
+
+    #header {
+        overflow: hidden;
+    }
+
+    #header #nav {
+        display: block;
+    }
+
+    #header #nav .subnav {
+        position: initial;
+        background-color: #333;
+    }
+
+    #header #nav .subnav a {
+        color: #fff;
+        padding: 4px 41px;
+    }
+
+    #header #nav > li:first-child {
+        display: inline-block;
+    }
+
+    #header #nav li {
+        display: block;
+    }
+
+    #header #nav a {
+        display: block;
+        padding: 2px 24px;
+    }
+
+    #header #search {
+        display: none;
+    }
+
+    #header #mobile-menu {
+        position: absolute;
+        top: 0;
+        right: 0;
+        float: right;
+        padding: 0 24px;
+    }
+    
+    #header #mobile-menu .menu-icon {
+        color: white;
+        font-size: 20px;
+        line-height: 46px;
+    }
+
+    #header #mobile-menu:hover {
+        background-color: #ccc;
+    }
+
+    #header #mobile-menu:hover i{
+        color: #000;
+    }
+
+    #content .member-img {
+        width: 60%;
+    }
+
+    #content .contact-info {
+        line-height: 1.8;
+        margin-bottom: 32px;
+    }
+    
+    #content .form-submit {
+        padding: 16px 16px;
+    }
+}
