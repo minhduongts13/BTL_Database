@@ -57,20 +57,38 @@
 
                 <!-- Form thông tin -->
                 <form>
+                <?php
+                    include 'connect.php'; // Kết nối đến CSDL
+                    $id = $_GET['id'];
+                    $stmt = $db->prepare("SELECT 
+                        *
+                    FROM 
+                        NGUOI_DUNG
+                    WHERE ID = $id;
+                    ");
+
+                    $stmt->execute();
+
+                    $result = $stmt->fetchAll();
+                    $randomNumber = mt_rand(100000000, 999999999);
+                    $randomTimestamp = date("d/m/Y", mt_rand(1/1/1950, 28/11/2024));
+                    $ho = substr($result[0]['Ten_dang_nhap'], 0, 4); // Lấy 4 ký tự đầu làm họ
+                    $ten = substr($result[0]['Ten_dang_nhap'], 4); // Phần còn lại là tên
+                    echo '
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="lastName" class="form-label fw-bold">Họ:</label>
-                            <input type="text" id="lastName" class="form-control" value="Nguyễn Văn">
+                            <input type="text" id="lastName" class="form-control" value="' . $ho .'">
                         </div>
                         <div class="col-md-6">
                             <label for="firstName" class="form-label fw-bold">Tên:</label>
-                            <input type="text" id="firstName" class="form-control" value="B">
+                            <input type="text" id="firstName" class="form-control" value="' . $ten . '">
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="username" class="form-label fw-bold">Tên đăng nhập:</label>
-                        <input type="text" id="username" class="form-control" value="nguyenvanb123">
+                        <input type="text" id="username" class="form-control" value="' . $result[0]['Ten_dang_nhap'] . '">
                     </div>
 
                     <div class="mb-3">
@@ -83,7 +101,7 @@
 
                     <div class="mb-3">
                         <label for="dob" class="form-label fw-bold">Ngày sinh:</label>
-                        <input type="date" id="dob" class="form-control" value="2000-11-01">
+                        <input type="date" id="dob" class="form-control" value="' . $randomTimestamp . '">
                     </div>
 
                     <div class="mb-3">
@@ -94,7 +112,7 @@
                     <div class="mb-3">
                         <label for="email" class="form-label fw-bold">Email:</label>
                         <div class="input-group">
-                            <input type="email" id="email" class="form-control" value="nguyenvanb@gmail.com">
+                            <input type="email" id="email" class="form-control" value="' . $result[0]['Ten_dang_nhap'] . '@gmail.com">
                             <button type="button" class="btn btn-outline-danger">Đổi Email liên kết</button>
                         </div>
                     </div>
@@ -102,18 +120,11 @@
                     <div class="mb-3">
                         <label for="phone" class="form-label fw-bold">Số điện thoại:</label>
                         <div class="input-group">
-                            <input type="tel" id="phone" class="form-control" value="0123456789">
+                            <input type="tel" id="phone" class="form-control" value="0' . $randomNumber . '">
                             <button type="button" class="btn btn-outline-danger">Đổi số điện thoại</button>
                         </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="phone" class="form-label fw-bold">Số điện thoại:</label>
-                        <div class="input-group">
-                            <input type="tel" id="phone" class="form-control" value="0123456789">
-                            <button type="button" class="btn btn-outline-danger">Đổi số điện thoại</button>
-                        </div>
-                    </div>
+                    </div>'
+                ?>
                 </form>
             </div>
 
@@ -124,41 +135,82 @@
         </div>
     </div>
 
-    <div id="premium_account" class="container mt-5">
-        <div class="card text-white bg-dark shadow-lg">
+    <div id="premium_account" class="container my-5">
+        <div class="card bg-dark text-white shadow-lg">
             <!-- Tiêu đề -->
-            <div class="card-header bg-success bg-gradient text-uppercase text-center py-2">
+            <div class="card-header bg-gradient bg-success text-uppercase text-center py-3">
                 <h2 class="fw-bold mb-0">Quản lý thuê bao premium</h2>
             </div>
 
             <!-- Nội dung -->
             <div class="card-body">
-                <!-- Form thông tin -->
-                <form>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="startDate" class="form-label fw-bold">Ngày bắt đầu:</label>
-                            <input type="date" id="startDate" class="form-control" value="25/11/2024">
+                <!-- Thuê bao hiện có -->
+                <section class="mb-5">
+                    <h3 class="text-uppercase text-center text-primary fw-bold">Thuê bao hiện có</h3>
+                    <form class="mt-4">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="currentStartDate" class="form-label">Ngày bắt đầu</label>
+                                <input type="date" id="currentStartDate" class="form-control" value="2024-11-25">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="currentEndDate" class="form-label">Ngày kết thúc</label>
+                                <input type="date" id="currentEndDate" class="form-control" value="2024-01-25">
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <label for="endDate" class="form-label fw-bold">Ngày kết thúc:</label>
-                            <input type="text" id="endDate" class="form-control" value="25/1/2024">
+                        <div class="mb-3">
+                            <label for="currentAccountType" class="form-label">Loại thuê bao</label>
+                            <input type="text" id="currentAccountType" class="form-control" value="1 tháng">
                         </div>
-                    </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="currentPrice" class="form-label">Giá gốc</label>
+                                <input type="number" id="currentPrice" class="form-control" value="100000">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="currentVoucher" class="form-label">Voucher đã áp dụng</label>
+                                <input type="number" id="currentVoucher" class="form-control" value="100000">
+                            </div>
+                        </div>
+                    </form>
+                </section>
 
-                    <div class="mb-3">
-                        <label for="accountType" class="form-label fw-bold">Loại thuê bao:</label>
-                        <input type="text" id="accountType" class="form-control" value="1 tháng">
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="price" class="form-label fw-bold">Giá gốc:</label>
-                        <input type="number" id="price" class="form-control" value="100000">
-                    </div>
-                </form>
+                <!-- Thuê bao đã từng thanh toán -->
+                <section>
+                    <h3 class="text-uppercase text-center text-warning fw-bold">Thuê bao đã từng thanh toán</h3>
+                    <ul class="list-unstyled mt-4">
+                        <form>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="historyStartDate" class="form-label">Ngày bắt đầu</label>
+                                    <input type="date" id="historyStartDate" class="form-control" value="2024-11-25">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="historyEndDate" class="form-label">Ngày kết thúc</label>
+                                    <input type="date" id="historyEndDate" class="form-control" value="2024-01-25">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="historyAccountType" class="form-label">Loại thuê bao</label>
+                                <input type="text" id="historyAccountType" class="form-control" value="1 tháng">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="historyPrice" class="form-label">Giá gốc</label>
+                                    <input type="number" id="historyPrice" class="form-control" value="100000">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="historyVoucher" class="form-label">Voucher đã áp dụng</label>
+                                    <input type="number" id="historyVoucher" class="form-control" value="100000">
+                                </div>
+                            </div>
+                        </form>
+                    </ul>
+                </section>
             </div>
         </div>
     </div>
+
 
         <div id="footer" class="bg-black mt-2 text-light border-top border-white">
             <div class="row">

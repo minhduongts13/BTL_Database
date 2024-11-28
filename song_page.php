@@ -56,15 +56,49 @@
 
                     <!-- Thông tin bài hát -->
                     <div class="col-md-6">
-                        <h2 class="card-title fw-bold">AUGUST</h2>
-                        <ul class="list-unstyled mt-3">
-                            <li><strong>Tác Giả:</strong> Taylor Swift</li>
-                            <li><strong>Thời Lượng:</strong> 4:21</li>
-                            <li><strong>Ngày Phát Hành:</strong> 24/07/2020</li>
-                            <li><strong>Thể Loại:</strong> Pop</li>
-                            <li><strong>Credit:</strong> Taylor Swift, Jack Antonoff</li>
-                            <li><strong>Đặc Tả:</strong> Đây là bài hát thứ tám trong album phòng thu thứ tám của cô ấy Folklore.</li>
-                            <li><strong>Lượt Nghe:</strong> 1,310,468,111</li>
+                        <?php
+                            include 'connect.php'; // Kết nối đến CSDL
+                            $id = $_GET['id'];
+                            $stmt = $db->prepare("SELECT 
+                                    BAI_HAT.ID AS Ma_Bai_Hat,
+                                    BAI_HAT.Ten_bai_hat AS Ten_Bai_Hat,
+                                    BAI_HAT.Thoi_luong AS Thoi_Luong,
+                                    BAI_HAT.Ngay_phat_hanh AS Ngay_Phat_Hanh,
+                                    GROUP_CONCAT(DISTINCT THE_LOAI_BAI_HAT.The_loai SEPARATOR ', ') AS The_Loai,
+                                    GROUP_CONCAT(DISTINCT CREDIT_BAI_HAT.Credit SEPARATOR ', ') AS Credit,
+                                    BAI_HAT.Mo_ta_bai_hat AS Mo_Ta
+                                FROM 
+                                    BAI_HAT
+                                LEFT JOIN 
+                                    THE_LOAI_BAI_HAT ON BAI_HAT.ID = THE_LOAI_BAI_HAT.ID_Bai_hat
+                                LEFT JOIN 
+                                    CREDIT_BAI_HAT ON BAI_HAT.ID = CREDIT_BAI_HAT.ID_bai_hat
+                                WHERE 
+                                    BAI_HAT.ID = $id;
+                                GROUP BY 
+                                    BAI_HAT.ID
+                            ");
+
+                            $stmt->execute();
+
+                            $result = $stmt->fetchAll();
+
+                            if (count($result) > 0) {
+                                    echo '
+                                    <h2 class="card-title fw-bold text-uppercase">' . $result[0]['Ten_Bai_Hat'] . '</h2>
+                                    <ul class="list-unstyled mt-3">
+                                        <li><strong>Tác Giả:</strong> ' . $result[0]['Credit'] . '</li>
+                                        <li><strong>Thời Lượng:</strong> ' . $result[0]['Thoi_Luong'] . '</li>
+                                        <li><strong>Ngày Phát Hành:</strong> ' . $result[0]['Ngay_Phat_Hanh'] . '</li>
+                                        <li><strong>Thể Loại:</strong> ' . $result[0]['The_Loai'] . '</li>
+                                        <li><strong>Credit:</strong> ' . $result[0]['Credit'] . '</li>
+                                        <li><strong>Đặc Tả:</strong> ' . $result[0]['Mo_Ta'] . '</li>
+                                        <li><strong>Lượt Nghe:</strong> 1,310,468,111 </li>';
+            
+                            } else {
+                                echo "Không có sản phẩm nào";
+                            }
+                        ?>
                         </ul>
                     </div>
                 </div>
@@ -73,7 +107,27 @@
                 <div class="mt-4">
                     <h4 class="fw-bold text-uppercase border-bottom pb-2">Lời Bài Hát</h4>
                     <div class="overflow-auto p-3 bg-secondary rounded text-light" style="max-height: 300px;">
-                        <p>
+                    <?php
+                            include 'connect.php'; // Kết nối đến CSDL
+                            
+                            $stmt = $db->prepare("SELECT 
+                                    Loi_bai_hat
+                                FROM 
+                                    BAI_HAT
+                            ");
+
+                            $stmt->execute();
+
+                            $result = $stmt->fetchAll();
+
+                            if (count($result) > 0) {
+                                    echo '
+                                    <p>'. $result[0]['Loi_bai_hat'] .'</p>';
+                            } else {
+                                echo "Không có sản phẩm nào";
+                            }
+                        ?>    
+                    <!-- <p>
                         Salt air, and the rust on your door <br>
                                     I never needed anything more <br>
                                     Whispers of "Are you sure?" <br>
@@ -126,7 +180,7 @@
                                     For the hope of it all <br>
                                     For the hope of it all <br>
                                     For the hope of it all</p>
-                        </p>
+                        </p> -->
                     </div>
                 </div>
             </div>
@@ -168,6 +222,44 @@
                     <h4 class="mt-4">Đánh Giá Từ Người Dùng</h4>
                     <div class="border-top pt-3">
                         <!-- Mỗi bình luận -->
+                        <?php
+                            include 'connect.php'; // Kết nối đến CSDL
+                                $id = $_GET['id'];
+                                $stmt = $db->prepare("SELECT 
+                                    NGUOI_DUNG.Ten_dang_nhap AS Ten_Nguoi_Binh_Luan,
+                                    NOI_DUNG_BINH_LUAN.Noidung AS Noi_Dung_Binh_Luan,
+                                    RATE.Diem AS Diem_Rate
+                                FROM 
+                                    NOI_DUNG_BINH_LUAN
+                                LEFT JOIN 
+                                    NGUOI_DUNG ON NOI_DUNG_BINH_LUAN.ID_nguoi_dung = NGUOI_DUNG.ID
+                                LEFT JOIN 
+                                    RATE ON NOI_DUNG_BINH_LUAN.ID_Bai_hat = RATE.ID_Bai_hat 
+                                    AND NOI_DUNG_BINH_LUAN.ID_nguoi_dung = RATE.ID_nguoi_dung;
+                                WHERE NOI_DUNG_BINH_LUAN.ID_Bai_hat = $id;
+                                ");
+
+                                $stmt->execute();
+
+                                $result = $stmt->fetchAll();
+
+                                if (count($result) > 0) {
+                                        echo 
+                                        '<div class="d-flex mb-3">
+                                            <div class="me-3">
+                                                <img src="https://via.placeholder.com/50" class="rounded-circle" alt="User Avatar">
+                                            </div>
+                                            <div>
+                                                <h5 class="mb-1">' . $result[0]['Ten_Nguoi_Binh_Luan'] . '<span class="text-warning">★' . $result[0]['Diem_Rate'] . '</span></h5>
+                                                <p class="mb-0">' . $result[0]['Noi_Dung_Binh_Luan'] . '</p>
+                                                <small class="text-muted">2 ngày trước</small>
+                                            </div>
+                                        </div>';
+                
+                                } else {
+                                    echo "Không có bình luận nào";
+                                }
+                            ?>
                         <div class="d-flex mb-3">
                             <div class="me-3">
                                 <img src="https://via.placeholder.com/50" class="rounded-circle" alt="User Avatar">
