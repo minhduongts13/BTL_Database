@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="./assets/css/song_page.css">
     <link rel="stylesheet" href="./assets/css/responsive.css">
     <link rel="icon" type="image/x-icon" href="/assets/image/icon/album1989tv.jpg">
-    <title>The band</title>
+    
+    <title>Spoticon</title>
 </head>
 <body class="bg-black">
     <div class="header container-fluid border-bottom-0 d-flex align-items-center bg-black fixed-top py-3 px-4 shadow-lg">
@@ -217,10 +218,22 @@
                             <button type="submit" class="btn btn-success">Gửi đánh giá</button>
                         </div>
                     </form>
-                    
-                    <!-- Hiển thị đánh giá -->
-                    <h4 class="mt-4">Đánh Giá Từ Người Dùng</h4>
-                    <div class="border-top pt-3">
+                    <?php
+                        include 'connect.php'; // Kết nối đến CSDL
+                        $id = $_GET['id'];
+                        $stmt = $db->prepare("SELECT CalculateSongRating(:id) AS AverageRating");
+                        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+                        $stmt->execute();
+
+                        // Lấy kết quả từ hàm
+                        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                        $mark = $result['AverageRating'] ?? 0; // Giá trị trả về
+                        echo '
+                        <!-- Hiển thị đánh giá -->
+                        <h4 class="mt-4">Đánh Giá Từ Người Dùng:<span class="text-warning">★' . $mark . '</span> </h4>
+                        <div class="border-top pt-3">
+                        '
+                    ?>
                         <!-- Mỗi bình luận -->
                         <?php
                             include 'connect.php'; // Kết nối đến CSDL
@@ -235,7 +248,7 @@
                                     NGUOI_DUNG ON NOI_DUNG_BINH_LUAN.ID_nguoi_dung = NGUOI_DUNG.ID
                                 LEFT JOIN 
                                     RATE ON NOI_DUNG_BINH_LUAN.ID_Bai_hat = RATE.ID_Bai_hat 
-                                    AND NOI_DUNG_BINH_LUAN.ID_nguoi_dung = RATE.ID_nguoi_dung;
+                                    AND NOI_DUNG_BINH_LUAN.ID_nguoi_dung = RATE.ID_nguoi_dung
                                 WHERE NOI_DUNG_BINH_LUAN.ID_Bai_hat = $id;
                                 ");
 
@@ -244,14 +257,15 @@
                                 $result = $stmt->fetchAll();
 
                                 if (count($result) > 0) {
+                                    foreach ($result as $row)
                                         echo 
                                         '<div class="d-flex mb-3">
                                             <div class="me-3">
                                                 <img src="https://via.placeholder.com/50" class="rounded-circle" alt="User Avatar">
                                             </div>
                                             <div>
-                                                <h5 class="mb-1">' . $result[0]['Ten_Nguoi_Binh_Luan'] . '<span class="text-warning">★' . $result[0]['Diem_Rate'] . '</span></h5>
-                                                <p class="mb-0">' . $result[0]['Noi_Dung_Binh_Luan'] . '</p>
+                                                <h5 class="mb-1">' . $row['Ten_Nguoi_Binh_Luan'] . '<span class="text-warning"> ★ ' . $row['Diem_Rate'] . '</span></h5>
+                                                <p class="mb-0">' . $row['Noi_Dung_Binh_Luan'] . '</p>
                                                 <small class="text-muted">2 ngày trước</small>
                                             </div>
                                         </div>';

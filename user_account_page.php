@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="./assets/css/user_account_page.css">
     <link rel="stylesheet" href="./assets/css/responsive.css">
     <link rel="icon" type="image/x-icon" href="/assets/image/icon/album1989tv.jpg">
-    <title>The band</title>
+    <?php include("auth.php") ?>
+    <title>Spoticon</title>
 </head>
 <body class="bg-black">
     <div class="header container-fluid border-bottom-0 d-flex align-items-center bg-black fixed-top py-3 px-4 shadow-lg">
@@ -68,62 +69,60 @@
                     ");
 
                     $stmt->execute();
-
                     $result = $stmt->fetchAll();
                     $randomNumber = mt_rand(100000000, 999999999);
                     $randomTimestamp = date("d/m/Y", mt_rand(1/1/1950, 28/11/2024));
                     $ho = substr($result[0]['Ten_dang_nhap'], 0, 4); // Lấy 4 ký tự đầu làm họ
                     $ten = substr($result[0]['Ten_dang_nhap'], 4); // Phần còn lại là tên
+                    echo $result[0]['Mat_khau'];
                     echo '
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="lastName" class="form-label fw-bold">Họ:</label>
-                            <input type="text" id="lastName" class="form-control" value="' . $ho .'">
+                            <input type="text" id="lastName" class="form-control" value="' . $ho .'" readonly>
                         </div>
                         <div class="col-md-6">
                             <label for="firstName" class="form-label fw-bold">Tên:</label>
-                            <input type="text" id="firstName" class="form-control" value="' . $ten . '">
+                            <input type="text" id="firstName" class="form-control" value="' . $ten . '" readonly>
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="username" class="form-label fw-bold">Tên đăng nhập:</label>
-                        <input type="text" id="username" class="form-control" value="' . $result[0]['Ten_dang_nhap'] . '">
+                        <input type="text" id="username" class="form-control" value="' . $result[0]['Ten_dang_nhap'] . '" readonly>
                     </div>
 
                     <div class="mb-3">
                         <label for="password" class="form-label fw-bold">Mật khẩu:</label>
                         <div class="input-group">
-                            <input type="password" id="password" class="form-control" value="********">
-                            <button type="button" class="btn btn-outline-danger">Đổi mật khẩu</button>
+                            <input type="password" id="password" class="form-control" value="********" readonly>
+                            <a href="changePass.php?id=' . $id . '" class="text-decoration-none">
+                                <button type="button" class="btn btn-outline-danger">Đổi mật khẩu</button>
+                            </a>
                         </div>
                     </div>
+    
+                    
 
                     <div class="mb-3">
                         <label for="dob" class="form-label fw-bold">Ngày sinh:</label>
-                        <input type="date" id="dob" class="form-control" value="' . $randomTimestamp . '">
+                        <input type="date" id="dob" class="form-control" value="' . $randomTimestamp . '" readonly>
                     </div>
 
                     <div class="mb-3">
                         <label for="address" class="form-label fw-bold">Địa chỉ:</label>
-                        <input type="text" id="address" class="form-control" value="Việt Nam">
+                        <input type="text" id="address" class="form-control" value="Việt Nam" readonly>
                     </div>
 
                     <div class="mb-3">
                         <label for="email" class="form-label fw-bold">Email:</label>
-                        <div class="input-group">
-                            <input type="email" id="email" class="form-control" value="' . $result[0]['Ten_dang_nhap'] . '@gmail.com">
-                            <button type="button" class="btn btn-outline-danger">Đổi Email liên kết</button>
-                        </div>
+                        <input type="email" id="email" class="form-control" value="' . $result[0]['Ten_dang_nhap'] . '@gmail.com" readonly>
                     </div>
 
                     <div class="mb-3">
                         <label for="phone" class="form-label fw-bold">Số điện thoại:</label>
-                        <div class="input-group">
-                            <input type="tel" id="phone" class="form-control" value="0' . $randomNumber . '">
-                            <button type="button" class="btn btn-outline-danger">Đổi số điện thoại</button>
-                        </div>
-                    </div>'
+                        <input type="tel" id="phone" class="form-control" value="0' . $randomNumber . '" readonly>
+                    </div>';
                 ?>
                 </form>
             </div>
@@ -146,67 +145,98 @@
             <div class="card-body">
                 <!-- Thuê bao hiện có -->
                 <section class="mb-5">
-                    <h3 class="text-uppercase text-center text-primary fw-bold">Thuê bao hiện có</h3>
+                    <!-- <h3 class="text-uppercase text-center text-primary fw-bold">Thuê bao hiện có</h3> -->
+                    <?php
+                    include('connect.php');
+                    $id = $_GET['id'];
+                    $stmt = $db->prepare("SELECT 
+                        *
+                    FROM 
+                        THUE_BAO_PREMIUM
+                    JOIN
+                        NGUOI_DUNG
+                    ON THUE_BAO_PREMIUM.ID_nguoi_dung = NGUOI_DUNG.ID 
+                    WHERE THUE_BAO_PREMIUM.ID_nguoi_dung = $id;
+                    ");
+
+                    $stmt2 = $db->prepare("SELECT VOUCHER.Gia_tri as Gia_tri FROM THUE_BAO_PREMIUM JOIN VOUCHER ON THUE_BAO_PREMIUM.ID_voucher = VOUCHER.ID");
+                    $stmt3 = $db->prepare("SELECT CalculateRemainingDays(:id) AS DAYS");
+                    $stmt3->bindParam(':id', $id, PDO::PARAM_INT);
+                    $stmt3->execute();
+                        // Lấy kết quả từ hàm
+                    $result3 = $stmt3->fetch(PDO::FETCH_ASSOC);
+                    $day = $result3['DAYS'] ?? 0; // Giá trị trả về
+                    $stmt->execute();
+                    $stmt2->execute();
+                    $result = $stmt->fetchAll();
+                    $result2 = $stmt2->fetchAll();
+                    if (($result) > 0)
+                    echo '
                     <form class="mt-4">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="currentStartDate" class="form-label">Ngày bắt đầu</label>
-                                <input type="date" id="currentStartDate" class="form-control" value="2024-11-25">
+                                <input type="date" id="currentStartDate" class="form-control" value="' . $result[0]['Ngay_bat_dau'] . '" readonly>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="currentEndDate" class="form-label">Ngày kết thúc</label>
-                                <input type="date" id="currentEndDate" class="form-control" value="2024-01-25">
+                                <input type="date" id="currentEndDate" class="form-control" value="' . $result[0]['Ngay_ket_thuc'] . '" readonly>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="currentAccountType" class="form-label">Loại thuê bao</label>
-                            <input type="text" id="currentAccountType" class="form-control" value="1 tháng">
+                            <input type="text" id="currentAccountType" class="form-control" value="' . $result[0]['Loai_thue_bao'] . '" readonly>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="currentPrice" class="form-label">Giá gốc</label>
-                                <input type="number" id="currentPrice" class="form-control" value="100000">
+                                <input type="number" id="currentPrice" class="form-control" value="' . $result[0]['Gia_goc'] .'" readonly>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="currentVoucher" class="form-label">Voucher đã áp dụng</label>
-                                <input type="number" id="currentVoucher" class="form-control" value="100000">
+                                <input type="number" id="currentVoucher" class="form-control" value="' . $result2[0]['Gia_tri'] . '" readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="currentVoucher" class="form-label">Số ngày còn lại</label>
+                                <input type="text" id="dayLeft" class="form-control" value="' . $day . '" readonly>
                             </div>
                         </div>
-                    </form>
+                    </form>';
+                    ?>
                 </section>
 
                 <!-- Thuê bao đã từng thanh toán -->
-                <section>
+                <!-- <section>
                     <h3 class="text-uppercase text-center text-warning fw-bold">Thuê bao đã từng thanh toán</h3>
                     <ul class="list-unstyled mt-4">
                         <form>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="historyStartDate" class="form-label">Ngày bắt đầu</label>
-                                    <input type="date" id="historyStartDate" class="form-control" value="2024-11-25">
+                                    <input type="date" id="historyStartDate" class="form-control" value="2024-11-25" readonly>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="historyEndDate" class="form-label">Ngày kết thúc</label>
-                                    <input type="date" id="historyEndDate" class="form-control" value="2024-01-25">
+                                    <input type="date" id="historyEndDate" class="form-control" value="2024-01-25" readonly>
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <label for="historyAccountType" class="form-label">Loại thuê bao</label>
-                                <input type="text" id="historyAccountType" class="form-control" value="1 tháng">
+                                <input type="text" id="historyAccountType" class="form-control" value="1 tháng" readonly>
                             </div>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="historyPrice" class="form-label">Giá gốc</label>
-                                    <input type="number" id="historyPrice" class="form-control" value="100000">
+                                    <input type="number" id="historyPrice" class="form-control" value="100000" readonly>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="historyVoucher" class="form-label">Voucher đã áp dụng</label>
-                                    <input type="number" id="historyVoucher" class="form-control" value="100000">
+                                    <input type="number" id="historyVoucher" class="form-control" value="100000" readonly>
                                 </div>
                             </div>
                         </form>
                     </ul>
-                </section>
+                </section> -->
             </div>
         </div>
     </div>
@@ -243,6 +273,5 @@
         </div>
     </div>
 
-    
 </body>
 </html>
