@@ -2,7 +2,7 @@
 // Bắt đầu session
 session_start();
 include 'connect.php'; // Kết nối CSDL
-
+include("auth.php");
 // Kiểm tra nếu người dùng gửi form
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_GET['id']; // Lấy ID người dùng từ URL

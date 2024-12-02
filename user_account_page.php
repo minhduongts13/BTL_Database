@@ -14,7 +14,7 @@
 <body class="bg-black">
     <div class="header container-fluid border-bottom-0 d-flex align-items-center bg-black fixed-top py-3 px-4 shadow-lg">
         <!-- Tiêu đề -->
-        <a href="home_page.php" class="text-decoration-none">
+        <a href="homePage.php" class="text-decoration-none">
             <h1 class="header__title me-4 fw-bold text-uppercase text-light">Spoticon</h1>
         </a>
 
@@ -31,8 +31,19 @@
 
         <!-- Các nút chức năng -->
         <div class="ms-4 d-flex gap-3">
-            <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Thể loại</button>
-            <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Playlist của tôi</button>
+            <a href="advertiser_list.php" class="text-decoration-none text_light">
+                <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Nhà quảng cáo</button>
+            </a>
+            <a href="advertisement_list.php" class="text-decoration-none text_light">
+                <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Quảng cáo</button>
+            </a>
+            <?php 
+            echo '
+            <a class="text-decoration-none text_light" href="playlist.php?id='. $_SESSION['user_id'] .'">
+                <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Playlist của tôi</button>
+            </a>
+            ';
+            ?>
             <a href="user_account_page.php">
                 <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Tài khoản của tôi</button>
             </a>
@@ -60,7 +71,7 @@
                 <form>
                 <?php
                     include 'connect.php'; // Kết nối đến CSDL
-                    $id = $_GET['id'];
+                    $id = $_SESSION['user_id'];
                     $stmt = $db->prepare("SELECT 
                         *
                     FROM 
@@ -148,7 +159,7 @@
                     <!-- <h3 class="text-uppercase text-center text-primary fw-bold">Thuê bao hiện có</h3> -->
                     <?php
                     include('connect.php');
-                    $id = $_GET['id'];
+                    $id = $_SESSION['user_id'];
                     $stmt = $db->prepare("SELECT 
                         *
                     FROM 
@@ -159,49 +170,52 @@
                     WHERE THUE_BAO_PREMIUM.ID_nguoi_dung = $id;
                     ");
 
-                    $stmt2 = $db->prepare("SELECT VOUCHER.Gia_tri as Gia_tri FROM THUE_BAO_PREMIUM JOIN VOUCHER ON THUE_BAO_PREMIUM.ID_voucher = VOUCHER.ID");
-                    $stmt3 = $db->prepare("SELECT CalculateRemainingDays(:id) AS DAYS");
-                    $stmt3->bindParam(':id', $id, PDO::PARAM_INT);
-                    $stmt3->execute();
-                        // Lấy kết quả từ hàm
-                    $result3 = $stmt3->fetch(PDO::FETCH_ASSOC);
-                    $day = $result3['DAYS'] ?? 0; // Giá trị trả về
                     $stmt->execute();
-                    $stmt2->execute();
                     $result = $stmt->fetchAll();
-                    $result2 = $stmt2->fetchAll();
-                    if (($result) > 0)
-                    echo '
-                    <form class="mt-4">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="currentStartDate" class="form-label">Ngày bắt đầu</label>
-                                <input type="date" id="currentStartDate" class="form-control" value="' . $result[0]['Ngay_bat_dau'] . '" readonly>
+                    if (count($result) > 0){
+                        
+                        
+                        $stmt2 = $db->prepare("SELECT VOUCHER.Gia_tri as Gia_tri FROM THUE_BAO_PREMIUM JOIN VOUCHER ON THUE_BAO_PREMIUM.ID_voucher = VOUCHER.ID");
+                        $stmt3 = $db->prepare("SELECT CalculateRemainingDays(:id) AS DAYS");
+                        $stmt2->execute();
+                        $result2 = $stmt2->fetchAll();
+                        $stmt3->bindParam(':id', $id, PDO::PARAM_INT);
+                        $stmt3->execute();
+                            // Lấy kết quả từ hàm
+                        $result3 = $stmt3->fetch(PDO::FETCH_ASSOC);
+                        $day = $result3['DAYS'] ?? 0; // Giá trị trả về
+                        echo '
+                        <form class="mt-4">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="currentStartDate" class="form-label">Ngày bắt đầu</label>
+                                    <input type="date" id="currentStartDate" class="form-control" value="' . $result[0]['Ngay_bat_dau'] . '" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="currentEndDate" class="form-label">Ngày kết thúc</label>
+                                    <input type="date" id="currentEndDate" class="form-control" value="' . $result[0]['Ngay_ket_thuc'] . '" readonly>
+                                </div>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="currentEndDate" class="form-label">Ngày kết thúc</label>
-                                <input type="date" id="currentEndDate" class="form-control" value="' . $result[0]['Ngay_ket_thuc'] . '" readonly>
+                            <div class="mb-3">
+                                <label for="currentAccountType" class="form-label">Loại thuê bao</label>
+                                <input type="text" id="currentAccountType" class="form-control" value="' . $result[0]['Loai_thue_bao'] . '" readonly>
                             </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="currentAccountType" class="form-label">Loại thuê bao</label>
-                            <input type="text" id="currentAccountType" class="form-control" value="' . $result[0]['Loai_thue_bao'] . '" readonly>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="currentPrice" class="form-label">Giá gốc</label>
-                                <input type="number" id="currentPrice" class="form-control" value="' . $result[0]['Gia_goc'] .'" readonly>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="currentPrice" class="form-label">Giá gốc</label>
+                                    <input type="number" id="currentPrice" class="form-control" value="' . $result[0]['Gia_goc'] .'" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="currentVoucher" class="form-label">Voucher đã áp dụng</label>
+                                    <input type="number" id="currentVoucher" class="form-control" value="' . $result2[0]['Gia_tri'] . '" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="currentVoucher" class="form-label">Số ngày còn lại</label>
+                                    <input type="text" id="dayLeft" class="form-control" value="' . $day . '" readonly>
+                                </div>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="currentVoucher" class="form-label">Voucher đã áp dụng</label>
-                                <input type="number" id="currentVoucher" class="form-control" value="' . $result2[0]['Gia_tri'] . '" readonly>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="currentVoucher" class="form-label">Số ngày còn lại</label>
-                                <input type="text" id="dayLeft" class="form-control" value="' . $day . '" readonly>
-                            </div>
-                        </div>
-                    </form>';
+                        </form>';
+                    }
                     ?>
                 </section>
 
@@ -240,13 +254,23 @@
             </div>
         </div>
     </div>
+    <!-- Nút Đăng xuất -->
+    <div class="text-center my-4">
+        <form action="logout.php" method="post">
+            <button type="submit" class="btn btn-outline-danger btn-lg px-4 py-2">
+                <i class="ti-power-off"></i> Đăng xuất
+            </button>
+        </form>
+    </div>
 
 
         <div id="footer" class="bg-black mt-2 text-light border-top border-white">
             <div class="row">
                 <div class="col-4">
                     <div class="d-flex justify-content-center">
-                        <img src="./assets/image/icon/logo.png" alt="">   
+                        <a href="homePage.php">
+                            <img src="./assets/image/icon/logo.png" alt="">   
+                        </a>   
                     </div>
                     <div class="socials-list d-flex justify-content-center mt-1">
                         <a href=""><i class="ti-facebook text-light me-1"></i></a>

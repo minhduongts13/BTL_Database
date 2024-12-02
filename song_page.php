@@ -8,13 +8,13 @@
     <link rel="stylesheet" href="./assets/css/song_page.css">
     <link rel="stylesheet" href="./assets/css/responsive.css">
     <link rel="icon" type="image/x-icon" href="/assets/image/icon/album1989tv.jpg">
-    
+    <?php include("auth.php") ?>
     <title>Spoticon</title>
 </head>
 <body class="bg-black">
     <div class="header container-fluid border-bottom-0 d-flex align-items-center bg-black fixed-top py-3 px-4 shadow-lg">
         <!-- Tiêu đề -->
-        <a href="home_page.php" class="text-decoration-none">
+        <a href="homePage.php" class="text-decoration-none">
             <h1 class="header__title me-4 fw-bold text-uppercase text-light">Spoticon</h1>
         </a>
 
@@ -31,8 +31,19 @@
 
         <!-- Các nút chức năng -->
         <div class="ms-4 d-flex gap-3">
-            <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Thể loại</button>
-            <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Playlist của tôi</button>
+            <a href="advertiser_list.php" class="text-decoration-none text_light">
+                <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Nhà quảng cáo</button>
+            </a>
+            <a href="advertisement_list.php" class="text-decoration-none text_light">
+                <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Quảng cáo</button>
+            </a>
+            <?php 
+            echo '
+            <a class="text-decoration-none text_light" href="playlist.php?id='. $_SESSION['user_id'] .'">
+                <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Playlist của tôi</button>
+            </a>
+            ';
+            ?>
             <a href="user_account_page.php">
                 <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Tài khoản của tôi</button>
             </a>
@@ -310,7 +321,9 @@
             <div class="row">
                 <div class="col-4">
                     <div class="d-flex justify-content-center">
-                        <img src="./assets/image/icon/logo.png" alt="">   
+                        <a href="homePage.php">
+                            <img src="./assets/image/icon/logo.png" alt="">   
+                        </a>
                     </div>
                     <div class="socials-list d-flex justify-content-center mt-1">
                         <a href=""><i class="ti-facebook text-light me-1"></i></a>

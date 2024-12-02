@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="./assets/css/advertisers.css">
     <link rel="icon" type="image/x-icon" href="/assets/image/icon/album1989tv.jpg">
     <title>Advertisers</title>
+    <?php include("auth.php") ?>
 </head>
 
 <script>
@@ -27,7 +28,7 @@
 
     <div class="header container-fluid border-bottom-0 d-flex align-items-center bg-black fixed-top py-3 px-4 shadow-lg">
         <!-- Tiêu đề -->
-        <a href="home_page.php" class="text-decoration-none">
+        <a href="homePage.php" class="text-decoration-none">
             <h1 class="header__title me-4 fw-bold text-uppercase text-light">Spoticon</h1>
         </a>
 
@@ -44,8 +45,19 @@
 
         <!-- Các nút chức năng -->
         <div class="ms-4 d-flex gap-3">
-            <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Thể loại</button>
-            <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Playlist của tôi</button>
+            <a href="advertiser_list.php" class="text-decoration-none text_light">
+                <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Nhà quảng cáo</button>
+            </a>
+            <a href="advertisement_list.php" class="text-decoration-none text_light">
+                <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Quảng cáo</button>
+            </a>
+            <?php 
+            echo '
+            <a class="text-decoration-none text_light" href="playlist.php?id='. $_SESSION['user_id'] .'">
+                <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Playlist của tôi</button>
+            </a>
+            ';
+            ?>
             <a href="user_account_page.php">
                 <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Tài khoản của tôi</button>
             </a>
@@ -107,6 +119,37 @@
                 </tbody>
             </table>
 
+        </div>
+    </div>
+    <div id="footer" class="bg-black mt-5 text-light border-top border-white">
+        <div class="row">
+            <div class="col-4">
+                <div class="d-flex justify-content-center">
+                    <a href="homePage.php">
+                        <img src="./assets/image/icon/logo.png" alt="">   
+                    </a>
+                </div>
+                <div class="socials-list d-flex justify-content-center mt-1">
+                    <a href=""><i class="ti-facebook text-light me-1"></i></a>
+                    <a href=""><i class="ti-instagram text-light me-1"></i></a>
+                    <a href=""><i class="ti-linux text-light me-1"></i></a>
+                    <a href=""><i class="ti-pinterest text-light me-1"></i></a>
+                    <a href=""><i class="ti-twitter text-light me-1"></i></a>
+                    <a href=""><i class="ti-linkedin text-light"></i></a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <p class="fw-bold fs-3">Liên Hệ</p>
+                <p> <i class="ti-location-pin"></i> Số 123, Đường ABS, Thành phố XYZ</p>
+                <p> <i class="ti-mobile"></i> Phone: <a href="tel:+00151515">0123456789</a></p>
+                <p> <i class="ti-email"></i> Email: <a href="mailto:quangminh4141@gmail.com">Spoticon@mail.com</a></p>
+            </div>
+            <div class="col-md-4">
+                <p class="fw-bold fs-3">Hỗ Trợ</p>
+                <p>Điều khoản và Dịch vụ</p>
+                <p>Chính sách</p>
+                <p>Về chúng tôi</p>
+            </div>    
         </div>
     </div>
 </body>

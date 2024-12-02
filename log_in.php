@@ -11,6 +11,12 @@
     <link rel="stylesheet" href="./assets/css/login.css">
     <link rel="icon" type="image/x-icon" href="/assets/image/icon/album1989tv.jpg">
     <title>Advertisers</title>
+    <?php 
+    session_start();
+    if (isset($_SESSION['user_id'])){
+            header('Location: homePage.php');
+    }
+    ?>
 </head>
 
 
@@ -18,29 +24,10 @@
 
     <div class="header container-fluid border-bottom-0 d-flex align-items-center bg-black fixed-top py-3 px-4 shadow-lg">
         <!-- Tiêu đề -->
-        <a href="home_page.php" class="text-decoration-none">
+        <a href="homePage.php" class="text-decoration-none">
             <h1 class="header__title me-4 fw-bold text-uppercase text-light">Spoticon</h1>
         </a>
 
-        <!-- Thanh tìm kiếm -->
-        <form class="d-flex flex-grow-1" role="search">
-            <input id="Search" 
-                class="form-control me-2 rounded-pill border-0 shadow-sm" 
-                type="search" 
-                placeholder="Tìm kiếm bài hát, nghệ sĩ..." 
-                aria-label="Search" 
-                style="max-width: 600px; background-color: #1e1e1e; color: #fff;">
-            <button class="btn btn-success rounded-pill px-4" type="submit">Tìm kiếm</button>
-        </form>
-
-        <!-- Các nút chức năng -->
-        <div class="ms-4 d-flex gap-3">
-            <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Thể loại</button>
-            <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Playlist của tôi</button>
-            <a href="user_account_page.php">
-                <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Tài khoản của tôi</button>
-            </a>
-        </div>
     </div>
 
     <div id="song-description" class="container">
