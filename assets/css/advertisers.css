@@ -1,0 +1,25 @@
+
+
+.center {
+    text-align: center;    
+}
+
+.width10 {
+    width: 10%
+}
+
+.width20 {
+    width: 20%
+}
+
+.width50 {
+    width: 50%
+}
+
+.button-custom {
+    margin-left: 5%;
+}
+
+.mtop10 {
+    margin-top: 100px;
+}
