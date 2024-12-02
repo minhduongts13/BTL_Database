@@ -63,16 +63,15 @@
                     $idContract = $_GET['idCon'];
 
                     include "connect.php";
-                    $statement = $db->prepare("SELECT * FROM HOP_DONG_QUANG_CAO con JOIN NHA_QUANG_CAO ads ON con.ID_nha_quang_cao=ads.ID
-                                                    WHERE con.ID=$idContract");
+                    $statement = $db->prepare("CALL selectAdvertisement($idContract)");
                    
                     $statement->execute();
                     $result = $statement->fetch();
 
                     $nameAdvertiser = $result['Ten_don_vi_quang_cao'];
                     $description = $result['Mo_ta'];
-                    $dateStart = date_format(date_create($result['Ngay_bat_dau_quang_cao']), 'd-M-Y');
-                    $dateEnd = date_format(date_create($result['Thoi_gian_hieu_luc_hop_dong']), 'd-M-Y');
+                    $dateStart = date_format(date_create($result['Ngay_bat_dau']), 'd-M-Y');
+                    $dateEnd = date_format(date_create($result['Ngay_ket_thuc']), 'd-M-Y');
 
                     echo "
                     <div class='container'>
@@ -95,24 +94,22 @@
                     </div>
                     ";
 
-                    $statement = $db->prepare("SELECT * FROM QUANG_CAO_LOAI_1 WHERE ID_quang_cao=$idContract");
+                    $statement = $db->prepare("SELECT getAdsType($idContract)");
                     $statement->execute();
-                    $result = $statement->fetchAll();
-                    if (count($result) > 0) {
-                        echo "
+                    $result = $statement->fetch();
+                    echo "
                         <div class='container'>
                             <div class='row mt-3'>
                                 <div class='col text-uppercase'>Loại:</div>
-                                <div class='col'>Premium</div>
-                            </div>
-
+                                <div class='col'>$result[0]</div>
+                            </div>";
+                    if ($result[0] == 'Premium') {
+                        echo "
                             <div class='mt-5 d-flex justify-content-center fs-4'>
                                 DANH SÁCH NGHỆ SĨ ĐƯỢC CHỌN
                             </div>
-                        </div>
-                        
-                        
-                        <table class='table table-bordered table-hover table-responsive-lg mt-3'>
+
+                            <table class='table table-bordered table-hover table-responsive-lg mt-3'>
                             <thead class='table-success'>
                                 <tr>
                                     <th scope='col' class='center width10'>STT</th>
@@ -123,12 +120,10 @@
                             </thead>
                             <tbody>
                         ";
-                        $statement = $db->prepare("SELECT Nghe_danh, Ngay_bat_dau, Ngay_ket_thuc 
-                        FROM QUANG_CAO_LOAI_1_CHI_DINH_HOT_ARTIST JOIN NGHE_SI 
-                        ON QUANG_CAO_LOAI_1_CHI_DINH_HOT_ARTIST.ID_hot_artist=NGHE_SI.ID
-                        WHERE ID_quang_cao_loai_1=$idContract");
+                        $statement = $db->prepare("CALL getArtistsForAdsType1($idContract)");
                         $statement->execute();
                         $res = $statement->fetchAll();
+
                         for ($i = 0; $i < count($res); $i++) {
                             $name = $res[$i]['Nghe_danh'];
                             $startDate = $res[$i]['Ngay_bat_dau'];
@@ -141,61 +136,60 @@
                                     <th scope='col' class='center width20'>$endDate</th>
                                 </tr>
                             ";
-                            $i++;
                         }
                         echo "
                             </tbody>
                         </table>
-                        ";
-                    } else {
-                        echo "
-                        <div class='container'>
-                            <div class='row mt-3'>
-                                <div class='col text-uppercase'>Loại:</div>
-                                <div class='col'>Thường</div>
-                            </div>
 
-                            <div class='mt-5 d-flex justify-content-center fs-4'>
-                                DANH SÁCH BÀI HÁT ĐƯỢC CHỌN
-                            </div>
+                        <div class='mt-5 d-flex justify-content-center fs-4'>
+                            <a href='add_hot_artist.php?idAd=$idContract'>
+                            <button class='btn btn-success'>Thêm nghệ sĩ</button>
+                            </a>
                         </div>
-                        
-                        
-                        <table class='table table-bordered table-hover table-responsive-lg mt-3'>
-                            <thead class='table-success'>
-                                <tr>
-                                    <th scope='col' class='center width10'>STT</th>
-                                    <th scope='col' class='center width50'>BÀI HÁT</th>
-                                    <th scope='col' class='center width20'>NGÀY BẮT ĐẦU</th>
-                                    <th scope='col' class='center width20'>NGÀY HẾT HẠN</th>
-                                </tr>
-                            </thead>
-                            <tbody>
                         ";
-                        $statement = $db->prepare("SELECT Ten_bai_hat, Ngay_bat_dau, Ngay_ket_thuc 
-                        FROM QUANG_CAO_LOAI_2_CHI_DINH_BAI_HAT_THUONG JOIN BAI_HAT 
-                        ON QUANG_CAO_LOAI_2_CHI_DINH_BAI_HAT_THUONG.ID_bai_hat_thuong=BAI_HAT.ID
-                        WHERE ID_quang_cao_loai_2=$idContract");
-                        $statement->execute();
-                        $res = $statement->fetchAll();
-                        for ($i = 0; $i < count($res); $i++) {
-                            $name = $res[$i]['Ten_bai_hat'];
-                            $startDate = $res[$i]['Ngay_bat_dau'];
-                            $endDate = $res[$i]['Ngay_ket_thuc'];
-                            echo "
-                                <tr>
-                                    <th scope='row' class='center width10'>$i</th>
-                                    <th scope='col' class='center width50'>$name</th>
-                                    <th scope='col' class='center width20'>$startDate</th>
-                                    <th scope='col' class='center width20'>$endDate</th>
-                                </tr>
-                            ";
-                        }
-                        echo "
-                            </tbody>
-                        </table>
-                        ";
-                    }
+                    } 
+                    // else {
+                    //     echo "
+                    //         <div class='mt-5 d-flex justify-content-center fs-4'>
+                    //             DANH SÁCH BÀI HÁT ĐƯỢC CHỌN
+                    //         </div>
+                    //     </div>
+                    //     <table class='table table-bordered table-hover table-responsive-lg mt-3'>
+                    //         <thead class='table-success'>
+                    //             <tr>
+                    //                 <th scope='col' class='center width10'>STT</th>
+                    //                 <th scope='col' class='center width50'>BÀI HÁT</th>
+                    //                 <th scope='col' class='center width20'>NGÀY BẮT ĐẦU</th>
+                    //                 <th scope='col' class='center width20'>NGÀY HẾT HẠN</th>
+                    //             </tr>
+                    //         </thead>
+                    //         <tbody>
+                    //     ";
+                    //     $statement = $db->prepare("CALL getSongsForAdsType2($idContract)");
+                    //     $statement->execute();
+                    //     $res = $statement->fetchAll();
+                    //     for ($i = 0; $i < count($res); $i++) {
+                    //         $name = $res[$i]['Ten_bai_hat'];
+                    //         $startDate = $res[$i]['Ngay_bat_dau'];
+                    //         $endDate = $res[$i]['Ngay_ket_thuc'];
+                    //         echo "
+                    //             <tr>
+                    //                 <th scope='row' class='center width10'>$i</th>
+                    //                 <th scope='col' class='center width50'>$name</th>
+                    //                 <th scope='col' class='center width20'>$startDate</th>
+                    //                 <th scope='col' class='center width20'>$endDate</th>
+                    //             </tr>
+                    //         ";
+                    //     }
+                    //     echo "
+                    //         </tbody>
+                    //     </table>
+
+                    //     <div class='mt-5 d-flex justify-content-center fs-4'>
+                    //         <button class='btn btn-success'>Thêm bài hát mới</button>
+                    //     </div>
+                    //     ";
+                    // }
                 ?>
             </div>
         </div>

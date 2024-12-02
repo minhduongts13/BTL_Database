@@ -50,17 +50,13 @@
             <?php 
                 include '../connect.php';
 
-                $username = $_POST['username'];
-                $password = $_POST['pass'];
+                $idAd = $_GET['idAd'];
+                $artist = $_POST['artist'];
 
-                $statement = $db->prepare("SELECT checkLogin('$username', '$password')");
+                $statement = $db->prepare("SELECT chooseArtistForAd('$idAd', '$artist')");
                 $statement->execute();
                 $result = $statement->fetch();
-
-                $str = explode(':', $result[0]);
-                echo $str[0];               
-                session_start();
-                $_SESSION['idUser'] = $str[1];
+                echo $result[0];
             ?>
         </div>
     </div>

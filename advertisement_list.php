@@ -104,19 +104,21 @@
                         }
 
                         $now = new DateTime();
-
-                        $statement = $db->prepare("SELECT *
-                        FROM (NHA_QUANG_CAO ad JOIN HOP_DONG_QUANG_CAO con ON ad.ID = con.ID_nha_quang_cao)");
-                       
+                        
+                        if ($is_filter) {
+                            $statement = $db->prepare("CALL getAllAdvertisementsInEffect();");
+                        } else {
+                            $statement = $db->prepare("CALL getAllAdvertisements();");
+                        }
                         $statement->execute();
                         $result = $statement->fetchAll();
-
-                        $count = 1;    
+                        
+                        $count = 1;
                         for ($i = 0; $i < count($result); $i++) {
                             $idCon = $result[$i]['ID'];
                             $name = $result[$i]['Ten_don_vi_quang_cao'];
-                            $dateStart = date_create($result[$i]['Ngay_bat_dau_quang_cao']);
-                            $dateEnd = date_create($result[$i]['Thoi_gian_hieu_luc_hop_dong']);
+                            $dateStart = date_create($result[$i]['Ngay_bat_dau']);
+                            $dateEnd = date_create($result[$i]['Ngay_ket_thuc']);
 
                             if (($dateStart > $now || $dateEnd < $now) && ($is_filter)) {
                                 continue;

@@ -1,12 +1,2 @@
-<?php
-    include 'connect.php'; // Kết nối đến CSDL
-    $id = $_GET['id'];
-    $stmt = $db->prepare("SELECT image FROM products WHERE id = $id");
-    $stmt->execute();
-    $result = $stmt->fetch();
-    if (count($result) > 0) {
-        echo '<img class="curImg" src="' . $result['image'] . '" alt="">';
-    } else {
-        echo "Sản phẩm không hợp lệ";
-    }
-?> 
+Query.sql: truy vấn procedure và function
+Quảng cáo thường không được chọn bài hát nữa

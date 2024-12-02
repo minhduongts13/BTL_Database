@@ -46,60 +46,22 @@
         <?php
             include '../connect.php';
 
-            $addNewAdvertiser = true;
-            $id = null;
-            if (isset($_POST['index']) && !empty($_POST['index'])) {
-                $id = $_POST['index'];
-                $statement = $db->prepare("SELECT ID FROM NHA_QUANG_CAO WHERE ID=$id");
-                $statement->execute();
-                $result = $statement->fetch();
-                if (count($result) > 0) {
-                    $addNewAdvertiser = false;
-                }
-            }
-            $name = $_POST['ads_name'];
-            $des = $_POST['description'];
-            
+            $advertiser = $_POST['ads_name'];
+
             $start = strtotime($_POST['start_date']);
             $start = date('Y-m-d', $start);
             
             $end = strtotime($_POST['end_date']);
             $end = date('Y-m-d', $end);
 
-            if ($addNewAdvertiser) {
-                $statement = null;
-                if (empty($_POST['index'])) {
-                    $statement = $db->prepare("INSERT INTO NHA_QUANG_CAO (Ten_don_vi_quang_cao, Mo_ta) VALUES ('$name', '$des')");
-                    $statement->execute();
-                    $statement = $db->prepare("SELECT ID FROM NHA_QUANG_CAO WHERE Ten_don_vi_quang_cao = '$name' AND Mo_ta = '$des'");
-                    $statement->execute();
-                    $result = $statement->fetch();
-                    $id = $result['ID'];
-                }
-                else {
-                    $statement = $db->prepare("INSERT INTO NHA_QUANG_CAO VALUES ($id, $name, $des)");
-                    $statement->execute();
-                }
-            }
-            $statement = $db->prepare("INSERT INTO HOP_DONG_QUANG_CAO (Ngay_bat_dau_quang_cao, Thoi_gian_hieu_luc_hop_dong, ID_nha_quang_cao) 
-            VALUES ('$start', '$end', $id)");
+            $type = $_POST['type'];
+            $statement = $db->prepare("SELECT addAdvertisement('$advertiser', '$start', '$end', '$type')");
             $statement->execute();
 
-            $statement = $db->prepare("SELECT ID FROM HOP_DONG_QUANG_CAO 
-            WHERE Ngay_bat_dau_quang_cao='$start' AND Thoi_gian_hieu_luc_hop_dong = '$end' AND ID_nha_quang_cao=$id");
-            $statement->execute();
             $result = $statement->fetch();
-            $idHopDong = $result['ID'];
 
-            $typeOfAd = $_POST['type'];
-            if ($typeOfAd == "L1") {
-                $statement = $db->prepare("INSERT INTO QUANG_CAO_LOAI_1 VALUES ($idHopDong)");
-            } else {
-                $statement = $db->prepare("INSERT INTO QUANG_CAO_LOAI_2 VALUES ($idHopDong)");
-            }
-            $statement->execute();
+            echo $result;
         ?>
-        <p>Thêm hợp đồng thành công</p>
         <a href="advertisers.php">
             <button class="btn btn-light">Quay lại</button>
         </a>

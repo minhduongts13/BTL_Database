@@ -63,7 +63,7 @@
                     $idAds = $_GET['idAds'];
 
                     include "connect.php";
-                    $statement = $db->prepare("SELECT * FROM NHA_QUANG_CAO WHERE ID=$idAds");
+                    $statement = $db->prepare("CALL selectAdvertiser($idAds)");
                    
                     $statement->execute();
                     $result = $statement->fetch();

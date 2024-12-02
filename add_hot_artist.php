@@ -73,42 +73,40 @@
     <div id="song-description" class="container">
         <div class="card bg-dark text-white shadow-lg">
             <div class="bg-success bg-gradient p-2">
-                <h2 class="card-title text-center text-uppercase mb-0">THÊM HỢP ĐỒNG QUẢNG CÁO</h2>
+                <h2 class="card-title text-center text-uppercase mb-0">THÊM NGHỆ SĨ</h2>
             </div>
 
-            <form method="post" action="advertisers_action\addNewContract.php" id="addNewContract">
-                <div class="form-group row mt-2">
-                    <label for="name-advertiser" class="col-sm-2 col-form-label">Tên nhà quảng cáo</label>
-                    <div class="col-sm-4">
-                        <input type="text" class="form-control" id="name-advertiser" placeholder="Nhập tên nhà quảng cáo" name="ads_name" required>
+            <?php 
+                include 'connect.php';
+                $idAd = $_GET['idAd'];
+                $statement = $db->prepare("CALL getAllHotArtists");
+                $statement->execute();
+                $result = $statement->fetchAll();
+                $listOfOption = [];
+                for ($i = 0; $i < count($result); $i++) {
+                    $listOfOption[] = $result[$i]['Nghe_danh'];
+                }
+                echo "
+                <form method='post' id='addNewContract' action='advertisers_action/addNewArtist.php?idAd=$idAd'>
+                    <div class='form-group row mt-2'>
+                        <label for='name-advertiser' class='col-sm-2 col-form-label'>Chọn nghệ sĩ</label>
+                        <div class='col-sm-4'>
+                        <select name='artist' id='artists' class='form-select'>
+                ";
+                for ($i = 0; $i < count($result); $i++) {
+                    echo "<option value='" . $listOfOption[$i] . "'>" . $listOfOption[$i] .  "</option>";
+                }
+
+                echo "
+                        </select>
                     </div>
                 </div>
 
-                <div class="form-group row mt-2">
-                    <label for="date-start" class="col-sm-2 col-form-label">Ngày bắt đầu</label>
-                    <div class="col-sm-4">
-                        <input type="date" class="form-control" id="name-advertiser" name="start_date" placeholder="Nhập ngày bắt đầu" required>
-                    </div>
-                </div>
-
-                <div class="form-group row mt-2">
-                    <label for="date-end" class="col-sm-2 col-form-label">Ngày kết thúc</label>
-                    <div class="col-sm-4">
-                        <input type="date" class="form-control" id="name-advertiser" name="end_date" placeholder="Nhập ngày kết thúc" required>
-                    </div>
-                </div>
-
-                <div class="form-check mt-2">
-                    <input class="form-check-input" type="radio" id="L1" name="type" value="L1" required>
-                    <label for="L1">Loại premium</label> <br>
-                    <input class="form-check-input" type="radio" id="L2" name="type" value="L2" required>
-                    <label for="L2">Loại thường</label> <br>
-                </div>
-
-                <div class="form-group row mt-2 d-flex justify-content-center">
-                    <input class="btn btn-primary col-sm-1" type="submit">
-                </div>
-            </form>
+                <div class='mt-3 d-flex justify-content-center'>
+                    <input type='submit' class='btn btn-primary'>
+                </div> 
+            </form>"
+            ?>
 
             <div class="mt-3 d-flex justify-content-center">
                 <a href="advertisement_list.php">

@@ -49,16 +49,19 @@
             $des = $_POST['description'];
 
             include '../connect.php';
-            $statement = $db->prepare("UPDATE NHA_QUANG_CAO 
-            SET Ten_don_vi_quang_cao='$name', Mo_ta='$des' WHERE ID = $idCom");
+            $statement = $db->prepare("SELECT modifyAdvertiser($idCom, '$name', '$des')");
             $statement->execute();
             $result = $statement->fetch();
+            echo "
+            <div class='mt-3 d-flex justify-content-center'>$result[0]</div>
+            "
         ?>
 
-        <p>Sửa nhà quảng cáo thành công</p>
+        <div class='mt-3 d-flex justify-content-center'>
         <a href="../advertiser_list.php">
             <button class="btn btn-light">Quay lại</button>
         </a>
+        </div>
     </div>
 </body>
 </html>

@@ -52,16 +52,24 @@
 
                 $username = $_POST['username'];
                 $password = $_POST['pass'];
+                $passwordReentered = $_POST['repass'];
 
-                $statement = $db->prepare("SELECT checkLogin('$username', '$password')");
-                $statement->execute();
-                $result = $statement->fetch();
+                if ($password != $passwordReentered) {
+                    echo '<p>Mật khẩu nhập lại không trùng mật khẩu gốc</p>';
+                } else {
+                    $statement = $db->prepare("SELECT signUp('$username', '$password')");
+                    $statement->execute();
+                    $result = $statement->fetch();
 
-                $str = explode(':', $result[0]);
-                echo $str[0];               
-                session_start();
-                $_SESSION['idUser'] = $str[1];
+                    echo $result[0];
+                }
             ?>
+
+            <div class="d-flex align-items-center justify-content-center mt-3">
+                <a href='../log_in.php'>
+                <button class="btn btn-secondary">Quay lại trang đăng nhập</button>
+                </a>
+            </div>
         </div>
     </div>
 </body>

@@ -49,17 +49,22 @@
             $name = $_POST['advertiser_name'];
             $des = $_POST['description'];
             
-            $statement = $db->prepare("INSERT INTO NHA_QUANG_CAO (Ten_don_vi_quang_cao, Mo_ta) 
-            VALUES ('$name', '$des')");
+            $statement = $db->prepare("SELECT addAdvertiser('$name', '$des')");
             $statement->execute();
 
             $result = $statement->fetch();
+            $str = $result[0];
+            echo "
+                <div class='mt-3 d-flex justify-content-center'>
+                    $str
+                </div>
+            ";
         ?>
-        <p>Thêm nhà quảng cáo thành công</p>
-        <a href="../advertiser_list.php">
-            <button class="btn btn-light">Quay lại</button>
-        </a>
-
+        <div class='mt-3 d-flex justify-content-center'>
+            <a href="../advertiser_list.php">
+                <button class="btn btn-light">Quay lại</button>
+            </a>
+        </div>
     </div>
 </body>
 </html>
