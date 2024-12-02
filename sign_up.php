@@ -31,43 +31,12 @@
         <a href="homePage.php" class="text-decoration-none">
             <h1 class="header__title me-4 fw-bold text-uppercase text-light">Spoticon</h1>
         </a>
-
-        <!-- Thanh tìm kiếm -->
-        <form class="d-flex flex-grow-1" role="search">
-            <input id="Search" 
-                class="form-control me-2 rounded-pill border-0 shadow-sm" 
-                type="search" 
-                placeholder="Tìm kiếm bài hát, nghệ sĩ..." 
-                aria-label="Search" 
-                style="max-width: 600px; background-color: #1e1e1e; color: #fff;">
-            <button class="btn btn-success rounded-pill px-4" type="submit">Tìm kiếm</button>
-        </form>
-
-        <!-- Các nút chức năng -->
-        <div class="ms-4 d-flex gap-3">
-            <a href="advertiser_list.php" class="text-decoration-none text_light">
-                <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Nhà quảng cáo</button>
-            </a>
-            <a href="advertisement_list.php" class="text-decoration-none text_light">
-                <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Quảng cáo</button>
-            </a>
-            <?php 
-            echo '
-            <a class="text-decoration-none text_light" href="playlist.php?id='. $_SESSION['user_id'] .'">
-                <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Playlist của tôi</button>
-            </a>
-            ';
-            ?>
-            <a href="user_account_page.php">
-                <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Tài khoản của tôi</button>
-            </a>
-        </div>
     </div>
 
     <div id="song-description" class="container">
             
         <div class="card bg-dark text-white shadow-lg d-flex align-items-center justify-content-center vh-75">
-            <h2>ĐĂNG NHẬP</h2>
+            <h2>ĐĂNG KÍ</h2>
             <form class="w-25">
                 <div class="form-group mt-3">
                     <label for="username">Tên đăng nhập</label>
@@ -82,15 +51,9 @@
                     <label class="form-check-label" for="remember">Ghi nhớ người dùng</label>
                 </div>
                 <div class="d-flex align-items-center justify-content-center mt-3">
-                    <button type="submit" class="btn btn-primary">Đăng nhập</button>
+                    <button type="submit" class="btn btn-primary">Đăng kí</button>
                 </div>
             </form>
-
-            <div class="d-flex align-items-center justify-content-center mt-3">
-                <a href="">
-                    <button type="submit" class="btn btn-primary">Đăng nhập</button>
-                </a>
-            </div>
         </div>
     </div>
 </body>

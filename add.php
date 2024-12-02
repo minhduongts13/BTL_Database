@@ -48,13 +48,10 @@
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $title = $_POST['title'];
         
-        $stmt = $db->prepare("INSERT INTO BAI_HAT_THUOC_PLAYLIST (ID_Bai_hat, ID_Playlist)
-                                    SELECT 
-                                        (SELECT ID FROM BAI_HAT WHERE Ten_bai_hat = '$title'),
-                                        (SELECT ID FROM PLAYLIST WHERE ID_nguoi_dung = $user_id);
+        $stmt = $db->prepare("CALL AddSongToPlaylist(:user_id, :title);
                                     ");
         try {
-            $stmt->execute();
+            $stmt->execute(['user_id' => $user_id, 'title' => $title]);
             header("Location: playlist.php");
             exit;
         } catch (PDOException $e) {

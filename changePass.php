@@ -1,36 +1,27 @@
 <?php
-// Bắt đầu session
-session_start();
 include 'connect.php'; // Kết nối CSDL
 include("auth.php");
 // Kiểm tra nếu người dùng gửi form
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = $_GET['id']; // Lấy ID người dùng từ URL
+    $id = $_SESSION['user_id']; // Lấy ID người dùng từ URL
     $currentPassword = $_POST['currentPassword'];
     $newPassword = $_POST['newPassword'];
     $confirmPassword = $_POST['confirmPassword'];
 
     try {
-        // Kiểm tra mật khẩu hiện tại
-        $stmt = $db->prepare("SELECT Mat_khau FROM NGUOI_DUNG WHERE ID = :id");
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        // Gọi hàm MySQL changePassword
+        $stmt = $db->prepare("SELECT changePassword(:id, :currentPassword, :newPassword, :confirmPassword) AS result");
+        $stmt->execute([
+            'id' => $id,
+            'currentPassword' => $currentPassword,
+            'newPassword' => $newPassword,
+            'confirmPassword' => $confirmPassword
+        ]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if (!$user || $currentPassword != $user['Mat_khau']) {
-            $error = "Mật khẩu hiện tại không đúng!";
-        } elseif ($newPassword !== $confirmPassword) {
-            $error = "Mật khẩu mới và xác nhận mật khẩu không khớp!";
-        } else {
-            // Cập nhật mật khẩu
-            $updateStmt = $db->prepare("UPDATE NGUOI_DUNG SET Mat_khau = :newPassword WHERE ID = :id");
-            $updateStmt->bindParam(':newPassword', $newPassword, PDO::PARAM_STR);
-            $updateStmt->bindParam(':id', $id, PDO::PARAM_INT);
-            if ($updateStmt->execute()) {
-                $success = "Mật khẩu đã được cập nhật thành công!";
-            } else {
-                $error = "Đã xảy ra lỗi khi cập nhật mật khẩu.";
-            }
+        // Xử lý thông báo kết quả
+        if ($result) {
+            echo "<p>" . $result['result'] . "</p>";
         }
     } catch (PDOException $e) {
         $error = "Lỗi: " . $e->getMessage();

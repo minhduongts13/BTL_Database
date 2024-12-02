@@ -16,10 +16,11 @@
         <a href="homePage.php" class="text-decoration-none">
             <h1 class="header__title me-4 fw-bold text-uppercase text-light">Spoticon</h1>
         </a>
-        <form class="d-flex flex-grow-1" role="search">
-            <input id="Search" class="form-control me-2 rounded-pill border-0 shadow-sm" type="search" placeholder="Tìm kiếm bài hát, nghệ sĩ..." aria-label="Search" style="max-width: 600px; background-color: #1e1e1e; color: #fff;">
+        <form class="d-flex flex-grow-1" role="search" method="GET" action="search.php">
+            <input id="Search" class="form-control me-2 rounded-pill border-0 shadow-sm" type="text" name="query" placeholder="Tìm kiếm bài hát, nghệ sĩ..." aria-label="Search" style="max-width: 600px; background-color: #1e1e1e; color: #fff;">
             <button class="btn btn-success rounded-pill px-4" type="submit">Tìm kiếm</button>
         </form>
+
         <div class="ms-4 d-flex gap-3">
             <a href="advertiser_list.php" class="text-decoration-none text_light">
                 <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Nhà quảng cáo</button>

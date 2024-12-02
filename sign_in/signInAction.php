@@ -22,37 +22,6 @@
         <a href="homePage.php" class="text-decoration-none">
             <h1 class="header__title me-4 fw-bold text-uppercase text-light">Spoticon</h1>
         </a>
-
-        <!-- Thanh tìm kiếm -->
-        <form class="d-flex flex-grow-1" role="search">
-            <input id="Search" 
-                class="form-control me-2 rounded-pill border-0 shadow-sm" 
-                type="search" 
-                placeholder="Tìm kiếm bài hát, nghệ sĩ..." 
-                aria-label="Search" 
-                style="max-width: 600px; background-color: #1e1e1e; color: #fff;">
-            <button class="btn btn-success rounded-pill px-4" type="submit">Tìm kiếm</button>
-        </form>
-
-        <!-- Các nút chức năng -->
-        <div class="ms-4 d-flex gap-3">
-            <a href="advertiser_list.php" class="text-decoration-none text_light">
-                <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Nhà quảng cáo</button>
-            </a>
-            <a href="advertisement_list.php" class="text-decoration-none text_light">
-                <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Quảng cáo</button>
-            </a>
-            <?php 
-            echo '
-            <a class="text-decoration-none text_light" href="playlist.php?id='. $_SESSION['user_id'] .'">
-                <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Playlist của tôi</button>
-            </a>
-            ';
-            ?>
-            <a href="user_account_page.php">
-                <button type="button" class="btn btn-outline-light rounded-pill px-3 py-2">Tài khoản của tôi</button>
-            </a>
-        </div>
     </div>
     </div>
 
@@ -63,22 +32,21 @@
 
                 $username = $_POST['username'];
                 $password = $_POST['pass'];
-
-                $statement = $db->prepare("SELECT ID, Ten_dang_nhap, Mat_khau FROM NGUOI_DUNG WHERE Ten_dang_nhap='$username'");
-                $statement->execute();
                 
-                $result = $statement->fetch();
-                if (!$result) {
-                    echo "<p>Tài khoản không tồn tại</p>";
-                } else {
-                    $passFromDB = $result['Mat_khau'];
-                    if ($password != $passFromDB)
-                        echo "<p>Mật khẩu sai</p>"; 
-                    else {
-                        echo "<p>Đăng nhập thành công</p>";
+                try {
+                    $stmt = $db->prepare("SELECT checkLogin(:username, :password) AS result");
+                    $stmt->execute(['username' => $username, 'password' => $password]);
+                    $result = $stmt->fetch();
+                    $response = $result['result']; // Chuỗi dạng "trạng_thái:user_id"
+                    list($status, $userId) = explode(':', $response);
+                    if ($userId == 0) {
+                        header("Location: ../log_in.php");
+                        echo "<p>Sai tài khoản hoặc mật khẩu</p>";
+
+                    } else {
                         session_start();
                         $_SESSION['username'] = $username;
-                        $_SESSION['user_id'] = $result['ID'];
+                        $_SESSION['user_id'] = $userId;
                         header('Location: ../homePage.php');
                         echo "
                             <div class='d-flex align-items-center'>
@@ -88,6 +56,8 @@
                             </div>
                         ";
                     }
+                } catch (PDOException $e) {
+                    echo "Lỗi: " . $e->getMessage();
                 }
                 
             ?>

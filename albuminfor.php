@@ -67,12 +67,8 @@
                 include 'connect.php'; // Kết nối CSDL
                 $album_id = $_GET['id'];
                 // Lấy danh sách bài hát từ CSDL
-                $stmt = $db->prepare("SELECT * FROM ALBUM 
-                                            LEFT JOIN NHA_PHAT_HANH ON ALBUM.ID_nha_phat_hanh = NHA_PHAT_HANH.ID 
-                                            LEFT JOIN NHOM_NHAC ON ALBUM.ID_nhom_nhac = NHOM_NHAC.ID
-                                            LEFT JOIN NGHE_SI ON ALBUM.ID_ca_si = NGHE_SI.ID
-                                            WHERE ALBUM.ID = $album_id;");
-                $stmt->execute();
+                $stmt = $db->prepare("CALL GetAlbumDetails(:album_id)");
+                $stmt->execute(['album_id' => $album_id]);
                 $result = $stmt->fetchAll();
     
                 foreach ($result as $row){

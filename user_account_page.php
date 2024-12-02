@@ -85,7 +85,6 @@
                     $randomTimestamp = date("d/m/Y", mt_rand(1/1/1950, 28/11/2024));
                     $ho = substr($result[0]['Ten_dang_nhap'], 0, 4); // Lấy 4 ký tự đầu làm họ
                     $ten = substr($result[0]['Ten_dang_nhap'], 4); // Phần còn lại là tên
-                    echo $result[0]['Mat_khau'];
                     echo '
                     <div class="row mb-3">
                         <div class="col-md-6">
@@ -160,25 +159,18 @@
                     <?php
                     include('connect.php');
                     $id = $_SESSION['user_id'];
-                    $stmt = $db->prepare("SELECT 
-                        *
-                    FROM 
-                        THUE_BAO_PREMIUM
-                    JOIN
-                        NGUOI_DUNG
-                    ON THUE_BAO_PREMIUM.ID_nguoi_dung = NGUOI_DUNG.ID 
-                    WHERE THUE_BAO_PREMIUM.ID_nguoi_dung = $id;
-                    ");
-
+                    $stmt = $db->prepare("CALL getValidSubscription(:userId)");
+                    $stmt->bindParam(':userId', $id, PDO::PARAM_INT);
                     $stmt->execute();
-                    $result = $stmt->fetchAll();
-                    if (count($result) > 0){
-                        
-                        
+                    // Lấy kết quả
+                    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                    $stmt->closeCursor();
+                    if ($result && count($result) > 0){
                         $stmt2 = $db->prepare("SELECT VOUCHER.Gia_tri as Gia_tri FROM THUE_BAO_PREMIUM JOIN VOUCHER ON THUE_BAO_PREMIUM.ID_voucher = VOUCHER.ID");
-                        $stmt3 = $db->prepare("SELECT CalculateRemainingDays(:id) AS DAYS");
                         $stmt2->execute();
                         $result2 = $stmt2->fetchAll();
+                        $stmt2->closeCursor();
+                        $stmt3 = $db->prepare("SELECT CalculateRemainingDays(:id) AS DAYS");
                         $stmt3->bindParam(':id', $id, PDO::PARAM_INT);
                         $stmt3->execute();
                             // Lấy kết quả từ hàm
@@ -189,21 +181,21 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="currentStartDate" class="form-label">Ngày bắt đầu</label>
-                                    <input type="date" id="currentStartDate" class="form-control" value="' . $result[0]['Ngay_bat_dau'] . '" readonly>
+                                    <input type="date" id="currentStartDate" class="form-control" value="' . $result['Ngay_bat_dau'] . '" readonly>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="currentEndDate" class="form-label">Ngày kết thúc</label>
-                                    <input type="date" id="currentEndDate" class="form-control" value="' . $result[0]['Ngay_ket_thuc'] . '" readonly>
+                                    <input type="date" id="currentEndDate" class="form-control" value="' . $result['Ngay_ket_thuc'] . '" readonly>
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <label for="currentAccountType" class="form-label">Loại thuê bao</label>
-                                <input type="text" id="currentAccountType" class="form-control" value="' . $result[0]['Loai_thue_bao'] . '" readonly>
+                                <input type="text" id="currentAccountType" class="form-control" value="' . $result['Loai_thue_bao'] . '" readonly>
                             </div>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="currentPrice" class="form-label">Giá gốc</label>
-                                    <input type="number" id="currentPrice" class="form-control" value="' . $result[0]['Gia_goc'] .'" readonly>
+                                    <input type="number" id="currentPrice" class="form-control" value="' . $result['Gia_goc'] .'" readonly>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="currentVoucher" class="form-label">Voucher đã áp dụng</label>
@@ -216,7 +208,13 @@
                             </div>
                         </form>';
                     }
+
                     ?>
+                    <a href="buy_premium.php">
+                        <div class="d-flex justify-content-center"> 
+                            <button type="submit" class="btn btn-outline-success btn-lg px-4 py-2"> MUA THUÊ BAO PREMIUM </button> 
+                        </div> 
+                    </a>
                 </section>
 
                 <!-- Thuê bao đã từng thanh toán -->
