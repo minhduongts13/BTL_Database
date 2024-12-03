@@ -70,7 +70,7 @@
                         'song_id' => $song['ID'],
                         'playlist_id' => $playlist['ID']
                     ]);
-                    header("Location: index.php"); // Chuyển hướng sau khi thành công
+                    header("Location: playlist.php"); // Chuyển hướng sau khi thành công
                     exit;
                 }
             }

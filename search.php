@@ -63,7 +63,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title text-truncate">' . htmlspecialchars($song['Ten_Bai_Hat']) . '</h5>
                                     <p class="card-text"><small>Ngày phát hành: ' . htmlspecialchars($song['Ngay_Phat_Hanh']) . '</small></p>
-                                    <a href="http://localhost/song_page.php?id=' . htmlspecialchars($song['ID_Bai_Hat']) . '" class="btn btn-success btn-sm">Xem chi tiết</a>
+                                    <a href="song_page.php?id=' . htmlspecialchars($song['ID_Bai_Hat']) . '" class="btn btn-success btn-sm">Xem chi tiết</a>
                                 </div>
                             </div>
                         </div>';

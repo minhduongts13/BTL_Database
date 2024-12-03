@@ -11,6 +11,8 @@
     <link rel="icon" type="image/x-icon" href="/assets/image/icon/album1989tv.jpg">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <title>Advertisers</title>
+    <?php include("../auth/php"); ?>
+
 </head>
 
 <body class="bg-black">

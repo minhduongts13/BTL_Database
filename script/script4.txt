@@ -1,0 +1,97 @@
+DELIMITER $$
+
+CREATE PROCEDURE CalculateRemainingDays(IN userID INT)
+BEGIN
+    -- Kiểm tra tham số đầu vào
+    IF userID IS NULL OR userID <= 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ID người dùng không hợp lệ!';
+    END IF;
+
+    -- Biến kiểm tra sự tồn tại của người dùng
+    DECLARE userExists INT;
+
+    -- Kiểm tra người dùng có tồn tại trong bảng NGUOI_DUNG hay không
+    SELECT COUNT(*) INTO userExists
+    FROM NGUOI_DUNG
+    WHERE ID = userID;
+
+    IF userExists = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ID người dùng không tồn tại!';
+    END IF;
+
+    -- Biến lưu trữ thông tin thuê bao
+    DECLARE subscriptionEndDate DATE;
+    DECLARE remainingDays INT;
+
+    -- Lấy ngày hết hạn thuê bao Premium
+    SELECT Ngay_het_han INTO subscriptionEndDate
+    FROM THUE_BAO_PREMIUM
+    WHERE ID_nguoi_dung = userID;
+
+    -- Kiểm tra nếu người dùng không có thuê bao Premium
+    IF subscriptionEndDate IS NULL THEN
+        SELECT CONCAT('Người dùng ID ', userID, ' không có thuê bao Premium.') AS Result;
+    ELSE
+        -- Tính số ngày còn lại
+        SET remainingDays = DATEDIFF(subscriptionEndDate, CURDATE());
+
+        -- Kiểm tra nếu thuê bao đã hết hạn
+        IF remainingDays < 0 THEN
+            SELECT CONCAT('Thuê bao Premium của người dùng ID ', userID, ' đã hết hạn.') AS Result;
+        ELSE
+            -- Trả về số ngày còn lại
+            SELECT 
+                CONCAT('Người dùng ID ', userID, ' còn ', remainingDays, ' ngày sử dụng thuê bao Premium.') AS RemainingDays;
+        END IF;
+    END IF;
+END$$
+
+DELIMITER ;
+
+
+
+DELIMITER $$
+
+CREATE PROCEDURE CalculateSongRating(IN songID INT)
+BEGIN
+    -- Kiểm tra tham số đầu vào
+    IF songID IS NULL OR songID <= 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ID bài hát không hợp lệ!';
+    END IF;
+
+    -- Biến kiểm tra sự tồn tại của bài hát
+    DECLARE songExists INT;
+
+    -- Kiểm tra bài hát có tồn tại trong bảng BAI_HAT hay không
+    SELECT COUNT(*) INTO songExists
+    FROM BAI_HAT
+    WHERE ID = songID;
+
+    IF songExists = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ID bài hát không tồn tại trong bảng BAI_HAT!';
+    END IF;
+
+    -- Biến lưu trữ thông tin
+    DECLARE avgRating DECIMAL(3, 2);
+    DECLARE totalRatings INT;
+
+    -- Tính toán tổng số lượt đánh giá và điểm trung bình
+    SELECT 
+        AVG(Diem) INTO avgRating,
+        COUNT(*) INTO totalRatings
+    FROM RATE
+    WHERE ID_bai_hat = songID;
+
+    -- Kiểm tra nếu bài hát không có lượt đánh giá
+    IF totalRatings = 0 THEN
+        SELECT CONCAT('Bài hát ID ', songID, ' chưa có lượt đánh giá nào.') AS Result;
+    ELSE
+        -- Trả về kết quả nếu có đánh giá
+        SELECT 
+            CONCAT('Bài hát ID ', songID, ' có ', totalRatings, ' lượt đánh giá.') AS TotalRatings,
+            CONCAT('Điểm trung bình: ', ROUND(avgRating, 2)) AS AverageRating;
+    END IF;
+END$$
+
+DELIMITER ;
+

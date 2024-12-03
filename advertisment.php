@@ -77,8 +77,8 @@
 
                     $nameAdvertiser = $result['Ten_don_vi_quang_cao'];
                     $description = $result['Mo_ta'];
-                    $dateStart = date_format(date_create($result['Ngay_bat_dau']), 'd-M-Y');
-                    $dateEnd = date_format(date_create($result['Ngay_ket_thuc']), 'd-M-Y');
+                    $dateStart = date_format(date_create($result['Thoi_gian_hieu_luc_hop_dong']), 'd-M-Y');
+                    $dateEnd = date_format(date_create($result['Ngay_bat_dau_quang_cao']), 'd-M-Y');
 
                     echo "
                     <div class='container'>

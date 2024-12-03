@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,8 +13,6 @@
     <link rel="stylesheet" href="./assets/css/login.css">
     <link rel="icon" type="image/x-icon" href="/assets/image/icon/album1989tv.jpg">
     <title>Advertisers</title>
-    <?php include("../auth/php"); ?>
-
 </head>
 
 
@@ -49,17 +49,38 @@
 
     <div id="song-description" class="container-fluid" style="margin-top: 7rem !important">            
         <div class="card bg-dark text-white shadow-lg align-items-center justify-content-center vh-75 mt-5">
-            <?php 
-                include '../connect.php';
+        <?php
+            include('connect.php');
+            include('auth.php');
 
-                $idAd = $_GET['idAd'];
-                $artist = $_POST['artist'];
+            try{
+                $rate = $_POST['rating'];
+                $comment = $_POST['comment'];
+                $user_id = $_SESSION['user_id'];
+                $song_id = $_GET['id'];
+                $stmt = $db->prepare("INSERT INTO RATE VALUES(:song_id, :user_id, :rate);");
+                $stmt->execute(['song_id' => $song_id, 'user_id' => $user_id, 'rate' => $rate]);
+                $stmt->closeCursor();
+                $stmt = $db->prepare('INSERT INTO BINH_LUAN VALUES(:song_id, :user_id);');
+                $stmt->execute(['song_id' => $song_id, 'user_id' => $user_id]);
+                $stmt->closeCursor();
+                $stmt = $db->prepare('INSERT INTO NOI_DUNG_BINH_LUAN VALUES(:song_id, :user_id, :comment);');
+                $stmt->execute(['song_id' => $song_id, 'user_id' => $user_id, 'comment' => $comment]);
+                header("Location: song_page.php?id=". $song_id);
+            }
+            catch (PDOException $e) {
+                echo '<p>Nội dung vi phạm tiêu chuẩn cộng đồng</p>
+                <div class="d-flex align-items-center justify-content-center mt-3">
+                    <a href="song_page.php?id='. $song_id .'">
+                    <button class="btn btn-secondary">Quay lại</button>
+                    </a>
+                </div>
+                
+                ';
+                
+            }
+        ?>
 
-                $statement = $db->prepare("SELECT chooseArtistForAd('$idAd', '$artist')");
-                $statement->execute();
-                $result = $statement->fetch();
-                echo $result[0];
-            ?>
         </div>
     </div>
 </body>

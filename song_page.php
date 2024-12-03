@@ -205,25 +205,28 @@
                 <!-- Nội dung đánh giá -->
                 <div class="card-body">
                     <!-- Form đánh giá -->
-                    <form class="mb-4">
+                    <?php
+                    echo '
+                    <form class="mb-4" method="POST" action="comment.php?id='. $_GET['id'] .'">
                         <div class="row g-3">
                             <!-- Điểm đánh giá -->
                             <div class="col-md-4">
                                 <label for="rating" class="form-label">Điểm đánh giá</label>
-                                <input type="number" class="form-control" id="rating" placeholder="5.0" min="1" max="5" step="0.1">
+                                <input type="number" name="rating" class="form-control" id="rating" placeholder="5.0" min="1" max="5" step="0.1">
                                 <small class="text-muted">Điểm đánh giá từ 1 đến 5</small>
                             </div>
                             
                             <!-- Nội dung bình luận -->
                             <div class="col-md-8">
                                 <label for="comment" class="form-label">Bình luận</label>
-                                <textarea class="form-control" id="comment" rows="2" placeholder="Viết bình luận của bạn..."></textarea>
+                                <textarea class="form-control" name="comment" id="comment" rows="2" placeholder="Viết bình luận của bạn..."></textarea>
                             </div>
                         </div>
                         <div class="text-end mt-3">
                             <button type="submit" class="btn btn-success">Gửi đánh giá</button>
                         </div>
-                    </form>
+                    </form>';
+                    ?>
                     <?php
                         include 'connect.php'; // Kết nối đến CSDL
                         $id = $_GET['id'];
@@ -280,28 +283,7 @@
                                     echo "Không có bình luận nào";
                                 }
                             ?>
-                        <div class="d-flex mb-3">
-                            <div class="me-3">
-                                <img src="https://via.placeholder.com/50" class="rounded-circle" alt="User Avatar">
-                            </div>
-                            <div>
-                                <h5 class="mb-1">Nguyễn Văn A <span class="text-warning">★ 4.5</span></h5>
-                                <p class="mb-0">Bài hát xuất sắc, tuyệt vời, đỉnh nóc kịch trần!</p>
-                                <small class="text-muted">2 ngày trước</small>
-                            </div>
-                        </div>
                         
-                        <!-- Bình luận khác -->
-                        <div class="d-flex mb-3">
-                            <div class="me-3">
-                                <img src="https://via.placeholder.com/50" class="rounded-circle" alt="User Avatar">
-                            </div>
-                            <div>
-                                <h5 class="mb-1">Trần Thị B <span class="text-warning">★ 5.0</span></h5>
-                                <p class="mb-0">Tuyệt vời! Không thể ngừng nghe bài này!</p>
-                                <small class="text-muted">3 ngày trước</small>
-                            </div>
-                        </div>
                         
                         <!-- Thêm nút xem thêm -->
                         <div class="text-center">

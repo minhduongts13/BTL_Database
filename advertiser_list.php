@@ -96,10 +96,10 @@
                         for ($i = 0; $i < count($result); $i++) {
                             $idAdvertiser = $result[$i]['ID'];
                             $name = $result[$i]['Ten_don_vi_quang_cao'];
-
+                            $j = $i + 1;
                             echo "
                                 <tr>
-                                    <th scope='row' class='center width10'>$i</th>
+                                    <th scope='row' class='center width10'>$j</th>
                                     <td class='width70'>$name</td>
                                     <td class='center width20'>
                                         <a href='advertiser.php?idAds=$idAdvertiser'>

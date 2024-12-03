@@ -1,6 +1,7 @@
 <?php
     if (isset($_GET['idAd'])) {
         include '../connect.php';
+        include("../auth/php"); 
 
         $idQuery = $_GET['idAd'];
 

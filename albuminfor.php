@@ -37,8 +37,12 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="album.php">Danh sách bài hát</a>
-                    </li>
+                        <?php 
+                        echo '
+                        <a class="nav-link active" href="album.php?id='. $_GET['id'] .'">Danh sách bài hát</a>
+                        ';
+                        ?>                   
+                        </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="albuminfor.php">Thông tin Album</a>
                     </li>
