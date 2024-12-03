@@ -8,7 +8,7 @@
   $conn = "mysql:";
   $conn .= "host=" . $fields["host"];
   $conn .= ";port=" . $fields["port"];;
-  $conn .= ";dbname=assignment2";
+  $conn .= ";dbname=ass2";
   $conn .= ";sslmode=verify-ca;sslrootcert=ca.pem";
 
   try {

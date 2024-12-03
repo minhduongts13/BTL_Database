@@ -148,18 +148,7 @@
                                     include 'connect.php'; // Kết nối đến CSDL
                                         $id = $_GET['id'];
                                         //Hiển thị 5 bài hát có lượt nghe cao nhất từ ID nghệ sĩ
-                                        $stmt = $db->prepare("SELECT DISTINCT 
-                                                        BAI_HAT.ID AS ID_Bai_Hat,
-                                                        BAI_HAT.Ten_bai_hat AS Ten_Bai_Hat, 
-                                                        BAI_HAT.Luot_nghe AS Luot_Nghe, 
-                                                        BAI_HAT.Ngay_phat_hanh AS Ngay_Phat_Hanh                          
-                                                FROM CA_SI, NHAC_SI, NHA_SAN_XUAT_AM_NHAC NSXAN, 
-                                                    CA_SI_THE_HIEN_BAI_HAT CS_BH, NHAC_SI_THE_HIEN_BAI_HAT NS_BH, BAI_HAT
-                                                WHERE ($id=CA_SI.ID AND CA_SI.ID = CS_BH.ID_ca_si AND CS_BH.ID_bai_hat=BAI_HAT.ID) OR
-                                                        ($id=NHAC_SI.ID AND NHAC_SI.ID = NS_BH.ID_nhac_si AND NS_BH.ID_bai_hat=BAI_HAT.ID) OR
-                                                        ($id=NSXAN.ID AND NSXAN.ID=BAI_HAT.ID_nha_san_xuat_am_nhac)
-                                                ORDER BY BAI_HAT.Luot_nghe DESC
-                                                LIMIT 5;
+                                        $stmt = $db->prepare("CALL GetTop5SongsByArtist($id);
                                         ");
 
                                         $stmt->execute();

@@ -114,22 +114,7 @@
                                     include 'connect.php'; // Kết nối đến CSDL
                                         $id = $_GET['id'];
                                         //Hiển thị 5 nghệ sĩ có tổng lượt nghe cao nhất từ ID nhà phát hành
-                                        $stmt = $db->prepare("SELECT NGHE_SI.ID AS ID_Nghe_Si,
-                                                    NGHE_SI.Nghe_danh AS Nghe_Danh, 
-                                                    NGHE_SI.Ho AS Ho_Nghe_Si,
-                                                    NGHE_SI.Ten AS Ten_Nghe_Si,
-                                                    sum(BAI_HAT.Luot_nghe) AS Tong_Luot_Nghe
-                                            FROM NGHE_SI, BAI_HAT
-                                            WHERE CONCAT (NGHE_SI.ID, '-', BAI_HAT.ID) IN (SELECT  DISTINCT CONCAT (NGHE_SI.ID, '-', BAI_HAT.ID)
-                                                                                        FROM NGHE_SI, NHA_SAN_XUAT_AM_NHAC NSXAN, 
-                                                                                            CA_SI_THE_HIEN_BAI_HAT CS_BH, NHAC_SI_THE_HIEN_BAI_HAT NS_BH, BAI_HAT
-                                                                                        WHERE $id=NGHE_SI.ID_nha_phat_hanh AND 
-                                                                                                ((NGHE_SI.ID=CS_BH.ID_ca_si AND CS_BH.ID_bai_hat=BAI_HAT.ID) OR
-                                                                                                (NGHE_SI.ID=NS_BH.ID_nhac_si AND NS_BH.ID_bai_hat=BAI_HAT.ID) OR
-                                                                                                (NGHE_SI.ID=NSXAN.ID AND NSXAN.ID=BAI_HAT.ID_nha_san_xuat_am_nhac)))
-                                            GROUP BY NGHE_SI.ID
-                                            ORDER BY Tong_Luot_Nghe DESC
-                                            LIMIT 5;
+                                        $stmt = $db->prepare("CALL GetTop5ArtistByPublisher($id);
                                         ");
 
                                         $stmt->execute();

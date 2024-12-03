@@ -9,41 +9,39 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <?php include("auth.php") ?>
     <style>
-        /* Đảm bảo ảnh nền bao phủ toàn bộ màn hình */
         .background-img {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Đảm bảo ảnh phủ đầy toàn bộ */
-            z-index: -1; /* Đưa ảnh xuống dưới nội dung */
+            object-fit: cover;
+            z-index: -1;
         }
-
-        /* Cải tiến các phần tử với nền mờ */
         .card {
-            background: rgba(0, 0, 0, 0.6); /* Nền mờ đen cho card */
+            background: rgba(0, 0, 0, 0.6);
             border-radius: 10px;
         }
-
         .navbar {
-            background-color: rgba(0, 123, 255, 0.8); /* Màu navbar với độ trong suốt */
+            background-color: rgba(0, 123, 255, 0.8);
         }
-
         .form-label {
-            color: white; /* Màu chữ cho nhãn */
+            color: white;
         }
-
         .btn {
             border-radius: 25px;
+        }
+        #suggestion-box {
+            max-height: 200px;
+            overflow-y: auto;
         }
     </style>
 </head>
 <body>
-    <?php
+<?php
     include 'connect.php';
+    include('auth.php');
     $user_id= $_SESSION['user_id'];
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $title = $_POST['title'];
@@ -59,30 +57,12 @@
         }
     }
     ?>
-    <!-- Hình nền sử dụng thẻ <img> -->
-    <img src="./assets/image/ass/add.jpg" alt="Background" class="background-img">
-
-    <!-- Navbar -->
+    <img src="assets/image/ass/add.jpg" alt="Background" class="background-img">
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="homePage.php">🎶 Spoticon - Khám phá danh sách nhạc yêu thích của bạn</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php">Playlist của tôi</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="add.php">Thêm bài hát</a>
-                    </li>
-                </ul>
-            </div>
+            <a class="navbar-brand" href="playlist.php">🎶 Spoticon - Khám phá danh sách nhạc yêu thích của bạn</a>
         </div>
     </nav>
-
-    <!-- Form -->
     <div class="container mt-5">
         <div class="card shadow-sm">
             <div class="card-header bg-primary text-white">
@@ -90,9 +70,10 @@
             </div>
             <div class="card-body">
                 <form action="" method="post">
-                    <div class="mb-3">
+                    <div class="mb-3 position-relative">
                         <label for="title" class="form-label">Tên bài hát:</label>
-                        <input type="text" id="title" name="title" class="form-control" required>
+                        <input type="text" id="title" name="title" class="form-control" required autocomplete="off">
+                        <div id="suggestion-box" class="list-group position-absolute w-100"></div>
                     </div>
                     <button type="submit" class="btn btn-success">
                         <i class="fas fa-plus-circle"></i> Thêm
@@ -102,5 +83,33 @@
             </div>
         </div>
     </div>
+    <script>
+        document.getElementById('title').addEventListener('input', function () {
+            const query = this.value.trim();
+            const suggestionBox = document.getElementById('suggestion-box');
+            if (query.length > 1) {
+                fetch(`search_songs.php?query=${encodeURIComponent(query)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        suggestionBox.innerHTML = '';
+                        if (data.length > 0) {
+                            data.forEach(song => {
+                                const item = document.createElement('div');
+                                item.className = 'list-group-item list-group-item-action';
+                                item.textContent = song.Ten_bai_hat;
+                                item.addEventListener('click', () => {
+                                    document.getElementById('title').value = song.Ten_bai_hat;
+                                    suggestionBox.innerHTML = '';
+                                });
+                                suggestionBox.appendChild(item);
+                            });
+                        }
+                    })
+                    .catch(err => console.error('Error fetching suggestions:', err));
+            } else {
+                suggestionBox.innerHTML = '';
+            }
+        });
+    </script>
 </body>
 </html>

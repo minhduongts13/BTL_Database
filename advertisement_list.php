@@ -33,13 +33,8 @@
         </a>
 
         <!-- Thanh tìm kiếm -->
-        <form class="d-flex flex-grow-1" role="search">
-            <input id="Search" 
-                class="form-control me-2 rounded-pill border-0 shadow-sm" 
-                type="search" 
-                placeholder="Tìm kiếm bài hát, nghệ sĩ..." 
-                aria-label="Search" 
-                style="max-width: 600px; background-color: #1e1e1e; color: #fff;">
+        <form class="d-flex flex-grow-1" role="search" method="GET" action="search.php">
+            <input id="Search" class="form-control me-2 rounded-pill border-0 shadow-sm" type="text" name="query" placeholder="Tìm kiếm bài hát, nghệ sĩ..." aria-label="Search" style="max-width: 600px; background-color: #1e1e1e; color: #fff;">
             <button class="btn btn-success rounded-pill px-4" type="submit">Tìm kiếm</button>
         </form>
 
@@ -127,7 +122,7 @@
                         for ($i = 0; $i < count($result); $i++) {
                             $idCon = $result[$i]['ID'];
                             $name = $result[$i]['Ten_don_vi_quang_cao'];
-                            $dateStart = date_create($result[$i]['Ngay_bat_dau_quang_cao']);
+                            $dateStart = date_create($result[$i]['Ngay_bat_dau']);
                             $dateEnd = date_create($result[$i]['Thoi_gian_hieu_luc_hop_dong']);
 
                             if (($dateStart > $now || $dateEnd < $now) && ($is_filter)) {
