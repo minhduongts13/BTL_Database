@@ -114,7 +114,7 @@
                                     include 'connect.php'; // Kết nối đến CSDL
                                         $id = $_GET['id'];
                                         //Hiển thị 5 nghệ sĩ có tổng lượt nghe cao nhất từ ID nhà phát hành
-                                        $stmt = $db->prepare("CALL GetTop5ArtistByPublisher($id);
+                                        $stmt = $db->prepare("CALL GetTop5AristByPublisher($id);
                                         ");
 
                                         $stmt->execute();

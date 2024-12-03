@@ -13,16 +13,6 @@
     <title>Advertisers</title>
 </head>
 
-<script>
-    function toggle() {
-        const filterButton =document.querySelector("#filter_button");
-        if (filterButton.innerHTML === "Chỉ xem các hợp đồng có hiệu lực") {
-            filterButton.innerHTML = "Xem tất cả các hợp đồng";
-        } else {
-            filterButton.innerHTML = "Chỉ xem các hợp đồng có hiệu lực";
-        }
-    }
-</script>
 
 <body class="bg-black">
 
@@ -36,19 +26,19 @@
     <div id="song-description" class="container">
             
         <div class="card bg-dark text-white shadow-lg d-flex align-items-center justify-content-center vh-75">
-            <h2>ĐĂNG KÍ</h2>
-            <form class="w-25">
+            <h2>ĐĂNG KÝ</h2>
+            <form class="w-25" method="post" action="sign_in/signUpAction.php">
                 <div class="form-group mt-3">
                     <label for="username">Tên đăng nhập</label>
                     <input type="text" class="form-control" id="username" name="username" aria-describedby="emailHelp" placeholder="Nhập tên đăng nhập của bạn">
                 </div>
                 <div class="form-group mt-3">
                     <label for="password">Nhập mật khẩu</label>
-                    <input type="password" class="form-control" id="password" placeholder="Nhập mật khẩu">
+                    <input type="password" class="form-control" id="pass" name="pass" placeholder="Nhập mật khẩu">
                 </div>
-                <div class="form-group form-check mt-3">
-                    <input type="checkbox" class="form-check-input" id="remember">
-                    <label class="form-check-label" for="remember">Ghi nhớ người dùng</label>
+                <div class="form-group mt-3">
+                    <label for="password">Nhập lại mật khẩu</label>
+                    <input type="password" class="form-control" id="pass_reentered" name="repass" placeholder="Nhập lại mật khẩu">
                 </div>
                 <div class="d-flex align-items-center justify-content-center mt-3">
                     <button type="submit" class="btn btn-primary">Đăng kí</button>

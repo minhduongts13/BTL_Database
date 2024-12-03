@@ -88,7 +88,7 @@
                     <?php
                         include "connect.php";
 
-                        $statement = $db->prepare("SELECT * FROM NHA_QUANG_CAO");
+                        $statement = $db->prepare("CALL getAllAdvertisers()");
                        
                         $statement->execute();
                         $result = $statement->fetchAll();

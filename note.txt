@@ -10,3 +10,6 @@
         echo "Sản phẩm không hợp lệ";
     }
 ?> 
+
+Query.sql: truy vấn procedure và function
+Quảng cáo thường không được chọn bài hát nữa

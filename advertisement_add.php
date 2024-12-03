@@ -85,26 +85,11 @@
 
             <form method="post" action="advertisers_action\addNewContract.php" id="addNewContract">
                 <div class="form-group row mt-2">
-                    <label for="name-advertiser" class="col-sm-2 col-form-label">Số thứ tự (chỉ nhập khi đã từng đăng ký)</label>
-                    <div class="col-sm-4">
-                        <input type="text" class="form-control" id="index-advertiser" placeholder="Nhập số thứ tự (nếu đã tồn tại)"
-                        onchange="findAdvertiser(this.value);" name="index">
-                    </div>
-                </div>
-
-                <div class="form-group row mt-2">
                     <label for="name-advertiser" class="col-sm-2 col-form-label">Tên nhà quảng cáo</label>
                     <div class="col-sm-4">
                         <input type="text" class="form-control" id="name-advertiser" placeholder="Nhập tên nhà quảng cáo" name="ads_name" required>
                     </div>
                 </div>
-
-                <div class="form-group row mt-2">
-                    <label for="description-advertiser" class="col-sm-2 col-form-label">Mô tả nhà quảng cáo</label>
-                    <div class="col-sm-6">
-                        <textarea class="form-control" id="description-advertiser" placeholder="Nhập mô tả nhà quảng cáo" name="description" rows="5"></textarea>
-                    </div>
-                </div>                
 
                 <div class="form-group row mt-2">
                     <label for="date-start" class="col-sm-2 col-form-label">Ngày bắt đầu</label>

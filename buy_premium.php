@@ -1,36 +1,54 @@
 <?php
-    // Kết nối tới CSDL
-    include 'connect.php';
-    include("auth.php");
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $userId = $_SESSION['user_id'];
-        $startDate = $_POST['start_date'];
-        $endDate = $_POST['end_date'];
-        $type = $_POST['type'];
-        $purchase = $_POST['purchase'];
-        $voucherId = $_POST['Voucher'] ?: null;
-        $priceMap = [
-            'option1' => 50000,
-            'option2' => 150000,
-            'option3' => 200000,
-        ];
-        $basePrice = isset($priceMap[$type]) ? $priceMap[$type] : 0;
-        try {
-            $stmt = $db->prepare("CALL addSubscription(:userId, :startDate, :endDate, :type, :purchase, :basePrice, :voucherId)");
-            $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
-            $stmt->bindParam(':startDate', $startDate, PDO::PARAM_STR);
-            $stmt->bindParam(':endDate', $endDate, PDO::PARAM_STR);
-            $stmt->bindParam(':type', $type, PDO::PARAM_STR);
-            $stmt->bindParam(':purchase', $purchase, PDO::PARAM_STR);
-            $stmt->bindParam(':basePrice', $basePrice, PDO::PARAM_INT);
-            $stmt->bindParam(':voucherId', $voucherId, PDO::PARAM_INT);
-            $stmt->execute();
-            echo '<p class="text-white">Thuê bao của bạn đã được mua thành công!</p>';
-        } catch (PDOException $e) {
-            echo '<p class="text-white">Lỗi: "' . $e->getMessage() .'</p>';
+// Kết nối tới CSDL
+include 'connect.php';
+include 'auth.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $userId = $_SESSION['user_id'];
+    $startDate = $_POST['start_date'];
+    $type = $_POST['type'];
+    $purchase = $_POST['purchase'];
+    $voucherId = !empty($_POST['Voucher']) ? $_POST['Voucher'] : null;
+
+    // Bảng giá thuê bao
+    $priceMap = [
+        'Basic' => 50000,
+        'Standard' => 150000,
+        'Premium' => 200000,
+    ];
+
+    $basePrice = $priceMap[$type] ?? 0;
+
+    try {
+        // Chuyển đổi ngày kết thúc
+        $startDateObj = new DateTime($startDate);
+        $endDateObj = clone $startDateObj;
+        $endDateObj->modify('+30 days');
+        $endDate = $endDateObj->format('Y-m-d');
+
+        // Gọi stored procedure
+        $stmt = $db->prepare("CALL addSubscription(:userId, :startDate, :endDate, :type, :purchase, :basePrice, :voucherId)");
+        $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $stmt->bindParam(':startDate', $startDate, PDO::PARAM_STR);
+        $stmt->bindParam(':endDate', $endDate, PDO::PARAM_STR);
+        $stmt->bindParam(':type', $type, PDO::PARAM_STR);
+        $stmt->bindParam(':purchase', $purchase, PDO::PARAM_STR);
+        $stmt->bindParam(':basePrice', $basePrice, PDO::PARAM_INT);
+        $stmt->bindParam(':voucherId', $voucherId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        echo '<p class="text-white">Thuê bao của bạn đã được mua thành công!</p>';
+    } catch (PDOException $e) {
+        // Phân biệt lỗi người dùng và lỗi hệ thống
+        if (strpos($e->getMessage(), 'SQLSTATE[23000]') !== false) {
+            echo '<p class="text-white">Lỗi: Voucher không hợp lệ hoặc thông tin thuê bao không chính xác.</p>';
+        } else {
+            echo '<p class="text-white">Lỗi hệ thống: ' . htmlspecialchars($e->getMessage()) . '</p>';
         }
+    }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -67,24 +85,24 @@
                         <label for="start_date" class="form-label">Ngày bắt đầu</label>
                         <input type="date" class="form-control" id="start_date" name="start_date" required>
                     </div>
-                    <div class="mb-3">
+                    <!-- <div class="mb-3">
                         <label for="end_date" class="form-label">Ngày kết thúc</label>
                         <input type="date" class="form-control" id="end_date" name="end_date" required>
-                    </div>
+                    </div> -->
                     <div class="mb-3">
                         <label for="type" class="form-label">Loại thuê bao: </label>
                         <select id="type" name="type"> 
-                            <option value="option1">Basic: 50000</option> 
-                            <option value="option2">Standard: 150000</option> 
-                            <option value="option3">Premium: 200000</option> 
+                            <option value="Basic" selected>Basic: 50000</option> 
+                            <option value="Standard">Standard: 150000</option> 
+                            <option value="Premium">Premium: 200000</option> 
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="purchase" class="form-label">Phương thức thanh toán: </label>
                         <select id="purchase" name="purchase"> 
-                            <option value="option1">E-Wallet</option> 
-                            <option value="option2">Bank Transfer</option> 
-                            <option value="option3">Master Card</option> 
+                            <option value="E-Wallet" selected>E-Wallet</option> 
+                            <option value="Bank Transfer">Bank Transfer</option> 
+                            <option value="Master Card">Master Card</option> 
                         </select>
                     </div>
                     <div class="mb-3">

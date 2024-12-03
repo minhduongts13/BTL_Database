@@ -112,6 +112,11 @@
 
                         $now = new DateTime();
 
+                        if ($is_filter) {
+                            $statement = $db->prepare("CALL getAllAdvertisementsInEffect();");
+                        } else {
+                            $statement = $db->prepare("CALL getAllAdvertisements();");
+                        }
                         $statement = $db->prepare("SELECT *
                         FROM (NHA_QUANG_CAO ad JOIN HOP_DONG_QUANG_CAO con ON ad.ID = con.ID_nha_quang_cao)");
                        
@@ -122,8 +127,8 @@
                         for ($i = 0; $i < count($result); $i++) {
                             $idCon = $result[$i]['ID'];
                             $name = $result[$i]['Ten_don_vi_quang_cao'];
-                            $dateStart = date_create($result[$i]['Ngay_bat_dau']);
-                            $dateEnd = date_create($result[$i]['Thoi_gian_hieu_luc_hop_dong']);
+                            $dateStart = date_create($result[$i]['Thoi_gian_hieu_luc_hop_dong']);
+                            $dateEnd = date_create($result[$i]['Ngay_bat_dau_quang_cao']);
 
                             if (($dateStart > $now || $dateEnd < $now) && ($is_filter)) {
                                 continue;
