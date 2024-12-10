@@ -9,20 +9,10 @@
     <link rel="stylesheet" href="./assets/css/responsive.css">
     <link rel="stylesheet" href="./assets/css/advertisers.css">
     <link rel="icon" type="image/x-icon" href="/assets/image/icon/album1989tv.jpg">
-    <title>Advertisers</title>
+    <title>Quảng cáo</title>
     <?php include("auth.php") ?>
 </head>
 
-<script>
-    function toggle() {
-        const filterButton =document.querySelector("#filter_button");
-        if (filterButton.innerHTML === "Chỉ xem các hợp đồng có hiệu lực") {
-            filterButton.innerHTML = "Xem tất cả các hợp đồng";
-        } else {
-            filterButton.innerHTML = "Chỉ xem các hợp đồng có hiệu lực";
-        }
-    }
-</script>
 
 <body class="bg-black">
 
@@ -84,7 +74,7 @@
                         <label for="is_filter">Chỉ xem những hợp đồng có hiệu lực</label> <br>
                         <input class="form-check-input" type="radio" id="not_filter" name="is_filter" value="false">
                         <label for="not_filter">Xem tất cả</label> <br>
-                        <input class="btn btn-primary mt-3" type="submit">
+                        <button class="btn btn-primary mt-3" type="submit">Xác nhận</button>
                     </form>
                 </div>
 

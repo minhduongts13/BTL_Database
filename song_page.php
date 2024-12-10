@@ -57,10 +57,13 @@
             <div class="card-body">
                 <div class="row g-4 align-items-center">
                     <!-- Hình ảnh -->
-                    <div class="col-md-6 text-center">
-                        <img src="./assets/image/slider/song.jpg" class="img-fluid rounded shadow-sm" alt="Image">
-                    </div>
-
+                    <?php
+                    $img = array('https://media.pitchfork.com/photos/6614092742a7de97785c7a48/master/w_1280%2Cc_limit/Billie-Eilish-Hit-Me-Hard-and-Soft.jpg', 'https://miro.medium.com/max/6000/1*O6soMKjf8PPr9lb6ong_Fw.jpeg', 'https://i.scdn.co/image/ab67616d0000b27371dea61e1ce07e18c746d775', 'https://th.bing.com/th/id/OIP.ihrb6OsCLaaNNeUX9zfp0wHaHa?rs=1&pid=ImgDetMain', 'https://images.genius.com/bcaf43cefdd93a9be1da5d17d4a061f9.1000x1000x1.jpg', 'https://is5-ssl.mzstatic.com/image/thumb/Music122/v4/61/3d/86/613d86b4-e539-108e-84f7-46ce1962f778/190296036132.jpg/1200x1200bf-60.jpg', 'https://th.bing.com/th/id/OIP.UgvF6caKdQipEANwQGcC4wHaHa?rs=1&pid=ImgDetMain', 'https://e.snmc.io/i/600/s/b8168764a6812ba7ee521cd32406b9ad/12621308/rose-and-bruno-mars-apt-cover-art.jpg', 'https://th.bing.com/th/id/OIP.64Ec-8p__cNSfhVuhf14rwHaHa?rs=1&pid=ImgDetMain', 'https://upload.wikimedia.org/wikipedia/en/3/38/When_We_All_Fall_Asleep%2C_Where_Do_We_Go%3F.png', 'https://th.bing.com/th/id/OIP.wljmAULxSw3-tgVzTPp_SAHaHa?rs=1&pid=ImgDetMain');
+                    $img_i = rand(0, count($img) - 1);
+                    echo '<div class="col-md-6 text-center">
+                        <img src="'. $img[$img_i] .'" class="img-fluid rounded shadow-sm" alt="Image">
+                    </div>';
+                    ?>
                     <!-- Thông tin bài hát -->
                     <div class="col-md-6">
                         <?php

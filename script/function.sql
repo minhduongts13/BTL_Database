@@ -220,7 +220,7 @@ BEGIN
 	SELECT * FROM NHA_QUANG_CAO;
 END //
 
-
+DELIMITER //
 -- Thêm một nhà quảng cáo
 CREATE DEFINER="avnadmin"@"%" FUNCTION "addAdvertiser"(nameCompany VARCHAR(255), description VARCHAR(512)) RETURNS varchar(255) CHARSET utf8mb4
     DETERMINISTIC
@@ -228,18 +228,18 @@ BEGIN
     DECLARE compID INT;
     
     -- Lấy mật khẩu từ database
-    SELECT ID INTO compId 
+    SELECT ID INTO compID 
     FROM NHA_QUANG_CAO 
     WHERE Ten_don_vi_quang_cao = nameCompany;
     
-    IF userId IS NULL THEN
+    IF compID IS NULL THEN
 		INSERT INTO NHA_QUANG_CAO (Ten_don_vi_quang_cao, Mo_ta) VALUES (nameCompany, description);
         RETURN 'Nhà quảng cáo được thêm thành công';
     ELSE
         RETURN 'Nhà quảng cáo đã có trên hệ thống';
     END IF;
 END //
-
+DELIMITER ;
 
 -- Xem một nhà quảng cáo
 CREATE DEFINER="avnadmin"@"%" PROCEDURE "selectAdvertiser"(IDAdv INT)
@@ -310,6 +310,7 @@ SELECT Ten_bai_hat, Ngay_bat_dau, Ngay_ket_thuc
                         WHERE ID_quang_cao_loai_2=idAd2;
 END //
 
+
 -- Thêm một hợp đồng quảng cáo
 CREATE DEFINER=`avnadmin`@`%` FUNCTION `addAdvertisement`(
     advertiser VARCHAR(255), 
@@ -340,24 +341,25 @@ BEGIN
     END IF;
 
     -- Insert a new advertisement contract
-    INSERT INTO HOP_DONG_QUANG_CAO (Ngay_bat_dau, Ngay_ket_thuc, ID_nha_quang_cao) 
+    INSERT INTO HOP_DONG_QUANG_CAO (Thoi_gian_hieu_luc_hop_dong, Ngay_bat_dau_quang_cao, ID_nha_quang_cao) 
     VALUES (startDate, endDate, idAdvertiser);
 
     -- Retrieve the ID of the newly inserted contract
     SELECT ID INTO idAdvertisement 
     FROM HOP_DONG_QUANG_CAO 
-    WHERE Ngay_bat_dau = startDate AND Ngay_ket_thuc = endDate AND ID_nha_quang_cao = idAdvertiser;
+    WHERE Thoi_gian_hieu_luc_hop_dong = startDate AND Ngay_bat_dau_quang_cao = endDate AND ID_nha_quang_cao = idAdvertiser LIMIT 1;
 
     -- Insert into the appropriate advertisement type table
     IF adsType = 'L1' THEN
-        INSERT INTO QUANG_CAO_LOAI_1 (ID_hop_dong) VALUES (idAdvertisement);
+        INSERT INTO QUANG_CAO_LOAI_1 (ID_quang_cao) VALUES (idAdvertisement);
     ELSE
-        INSERT INTO QUANG_CAO_LOAI_2 (ID_hop_dong) VALUES (idAdvertisement);
+        INSERT INTO QUANG_CAO_LOAI_2 (ID_quang_cao) VALUES (idAdvertisement);
     END IF;
 
     -- Return success message
-    RETURN CONCAT('Thêm hợp đồng thành công:', idAdvertisement);
+    RETURN CONCAT('Thêm hợp đồng thành công');
 END //
+
 
 -- Lấy các nghệ sĩ hot
 CREATE DEFINER=`avnadmin`@`%` PROCEDURE `getAllHotArtists`() 

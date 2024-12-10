@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="./assets/css/login.css">
     <link rel="icon" type="image/x-icon" href="/assets/image/icon/album1989tv.jpg">
     <title>Advertisers</title>
-    <?php include("../auth/php"); ?>
+    <?php include("../auth.php"); ?>
 
 </head>
 

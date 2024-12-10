@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="./assets/css/responsive.css">
     <link rel="icon" type="image/x-icon" href="/assets/image/icon/album1989tv.jpg">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <title>Advertisers</title>
+    <title>Sửa thông tin</title>
     <?php include("auth.php") ?>
 </head>
 
@@ -64,24 +64,24 @@
             $des = $result['Mo_ta'];
 
             echo "
-            <form method='post' action='advertisers_action\modifyAdvertiser.php?idCom=$idAds' id='addNewContract'>
+            <form method='post' action='modifyAdvertiser.php?idCom=$idAds' id='addNewContract'>
 
                 <div class='form-group row mt-2'>
                     <label for='name-advertiser' class='col-sm-2 col-form-label'>Tên nhà quảng cáo</label>
-                    <div class='col-sm-4'>
+                    <div class='col-8 col-md-6'>
                         <input type='text' class='form-control' id='name-advertiser' placeholder='Nhập tên nhà quảng cáo' name='advertiser_name' value='$name' required>
                     </div>
                 </div>
 
                 <div class='form-group row mt-2'>
                     <label for='description-advertiser' class='col-sm-2 col-form-label'>Mô tả nhà quảng cáo</label>
-                    <div class='col-sm-6'>
+                    <div class='col-8 col-md-6'>
                         <textarea class='form-control' id='description-advertiser' placeholder='Nhập mô tả nhà quảng cáo' name='description' rows='5'>$des</textarea>
                     </div>
                 </div>                
 
                 <div class='form-group row mt-2 d-flex justify-content-center'>
-                    <input class='btn btn-primary col-sm-1' type='submit'>
+                    <button class='btn btn-primary col-2 col-md-1' type='submit'>Sửa</button>
                 </div>
             </form>
             ";

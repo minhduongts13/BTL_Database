@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="./assets/css/advertisers.css">
     <link rel="stylesheet" href="./assets/css/login.css">
     <link rel="icon" type="image/x-icon" href="/assets/image/icon/album1989tv.jpg">
-    <title>Advertisers</title>
+    <title>Đăng ký</title>
 </head>
 
 
@@ -27,7 +27,7 @@
             
         <div class="card bg-dark text-white shadow-lg d-flex align-items-center justify-content-center vh-75">
             <h2>ĐĂNG KÝ</h2>
-            <form class="w-25" method="post" action="sign_in/signUpAction.php">
+            <form class="w-50" method="post" action="sign_up.php">
                 <div class="form-group mt-3">
                     <label for="username">Tên đăng nhập</label>
                     <input type="text" class="form-control" id="username" name="username" aria-describedby="emailHelp" placeholder="Nhập tên đăng nhập của bạn">
@@ -35,6 +35,7 @@
                 <div class="form-group mt-3">
                     <label for="password">Nhập mật khẩu</label>
                     <input type="password" class="form-control" id="pass" name="pass" placeholder="Nhập mật khẩu">
+                    <small>Mật khẩu phải có từ 8 kí tự trở lên, phải có ít nhất một chữ số, một chữ in hoa, một chữ thường, một kí tự đặc biệt</small>
                 </div>
                 <div class="form-group mt-3">
                     <label for="password">Nhập lại mật khẩu</label>
@@ -43,7 +44,35 @@
                 <div class="d-flex align-items-center justify-content-center mt-3">
                     <button type="submit" class="btn btn-primary">Đăng kí</button>
                 </div>
+
+                <div class="d-flex align-items-center justify-content-center mt-3">
+                    <small>Đã có tài khoản? Đăng nhập  <a href='../log_in.php'>ở đây</a></small>
+                </div>
+
             </form>
+
+            <div class="mt-3">
+                <?php 
+                    include 'connect.php';
+
+                    if (isset($_POST['username']) && isset($_POST['pass']) && isset($_POST['repass'])) {
+                        $username = $_POST['username'];
+                        $password = $_POST['pass'];
+                        $passwordReentered = $_POST['repass'];
+
+                        if ($password != $passwordReentered) {
+                            echo '<p>Mật khẩu nhập lại không trùng mật khẩu gốc</p>';
+                        } else {
+                            $statement = $db->prepare("SELECT signUp('$username', '$password')");
+                            $statement->execute();
+                            $result = $statement->fetch();
+
+                            echo $result[0];
+                        }
+                    }
+                    else echo '<div></div>'
+                ?>
+            </div>
         </div>
     </div>
 </body>

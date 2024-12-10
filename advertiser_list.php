@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="./assets/css/responsive.css">
     <link rel="stylesheet" href="./assets/css/advertisers.css">
     <link rel="icon" type="image/x-icon" href="/assets/image/icon/album1989tv.jpg">
-    <title>Advertisers</title>
+    <title>Nhà quảng cáo</title>
     <?php include("auth.php") ?>
 </head>
 

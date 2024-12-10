@@ -11,14 +11,14 @@
     <link rel="icon" type="image/x-icon" href="/assets/image/icon/album1989tv.jpg">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <title>Advertisers</title>
-    <?php include("../auth/php"); ?>
+    <?php include("../auth.php"); ?>
 
 </head>
 
 <body class="bg-black">
     <div class="header container-fluid border-bottom-0 d-flex align-items-center bg-black fixed-top py-3 px-4 shadow-lg">
         <!-- Tiêu đề -->
-        <a href="homePage.php" class="text-decoration-none">
+        <a href="/homePage.php" class="text-decoration-none">
             <h1 class="header__title me-4 fw-bold text-uppercase text-light">Spoticon</h1>
         </a>
 
@@ -63,12 +63,12 @@
             $end = date('Y-m-d', $end);
 
             $type = $_POST['type'];
-            $statement = $db->prepare("SELECT addAdvertisement('$advertiser', '$start', '$end', '$type')");
+            $statement = $db->prepare("SELECT addAdvertisement('$advertiser', '$start', '$end', '$type') as result");
             $statement->execute();
-            $result = $statement->fetch();
-            echo $result;
+            $result = $statement->fetch(PDO::FETCH_ASSOC);
+            echo $result['result'];
         ?>
-        <a href="advertisers.php">
+        <a href="/advertisement_list.php">
             <button class="btn btn-light">Quay lại</button>
         </a>
 

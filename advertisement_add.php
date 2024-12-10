@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="./assets/css/responsive.css">
     <link rel="icon" type="image/x-icon" href="/assets/image/icon/album1989tv.jpg">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <title>Advertisers</title>
+    <title>Thêm hợp đồng quảng cáo</title>
     <?php include("auth.php") ?>
 </head>
 
@@ -83,24 +83,24 @@
                 <h2 class="card-title text-center text-uppercase mb-0">THÊM HỢP ĐỒNG QUẢNG CÁO</h2>
             </div>
 
-            <form method="post" action="advertisers_action\addNewContract.php" id="addNewContract">
+            <form method="post" action="advertisement_add.php" id="addNewContract">
                 <div class="form-group row mt-2">
                     <label for="name-advertiser" class="col-sm-2 col-form-label">Tên nhà quảng cáo</label>
-                    <div class="col-sm-4">
+                    <div class="col-sm-8 col-md-6">
                         <input type="text" class="form-control" id="name-advertiser" placeholder="Nhập tên nhà quảng cáo" name="ads_name" required>
                     </div>
                 </div>
 
                 <div class="form-group row mt-2">
                     <label for="date-start" class="col-sm-2 col-form-label">Ngày bắt đầu</label>
-                    <div class="col-sm-4">
+                    <div class="col-sm-8 col-md-6">
                         <input type="date" class="form-control" id="name-advertiser" name="start_date" placeholder="Nhập ngày bắt đầu" required>
                     </div>
                 </div>
 
                 <div class="form-group row mt-2">
                     <label for="date-end" class="col-sm-2 col-form-label">Ngày kết thúc</label>
-                    <div class="col-sm-4">
+                    <div class="col-sm-8 col-md-6">
                         <input type="date" class="form-control" id="name-advertiser" name="end_date" placeholder="Nhập ngày kết thúc" required>
                     </div>
                 </div>
@@ -113,7 +113,7 @@
                 </div>
 
                 <div class="form-group row mt-2 d-flex justify-content-center">
-                    <input class="btn btn-primary col-sm-1" type="submit">
+                    <button class="btn btn-primary col-sm-2 col-md-1" type="submit">Thêm</button>
                 </div>
             </form>
 
@@ -122,6 +122,30 @@
                 <button class="btn btn-light">Quay lại</button>
                 </a>
             </div>
+
+            <?php
+                include 'connect.php';
+
+                if (isset($_POST['ads_name'])) {
+                    $advertiser = $_POST['ads_name'];
+                    
+                    $start = strtotime($_POST['start_date']);
+                    $start = date('Y-m-d', $start);
+                    
+                    $end = strtotime($_POST['end_date']);
+                    $end = date('Y-m-d', $end);
+
+                    $type = $_POST['type'];
+                    $statement = $db->prepare("SELECT addAdvertisement('$advertiser', '$start', '$end', '$type')");
+                    $statement->execute();
+                    $result = $statement->fetch();
+                    echo "
+                        <div class='d-flex justify-content-center mt-3'>$result[0]</div>
+                    ";
+                } else {
+                    echo "<div></div>";
+                }
+            ?>
     </div>
 </body>
 </html>

@@ -62,9 +62,16 @@
             <div class="card-body">
                 <div class="row g-4 align-items-center">
                     <!-- Hình ảnh -->
-                    <div class="col-md-6 text-center">
-                        <img src="./assets/image/slider/artist.jpg" class="img-fluid rounded shadow-sm" alt="Image">
+                    <div class="col-md-3">
+
                     </div>
+                    <div class="col-md-3 text-center">
+                        <?php
+                        $img = array('https://yt3.googleusercontent.com/oN0p3-PD3HUzn2KbMm4fVhvRrKtJhodGlwocI184BBSpybcQIphSeh3Z0i7WBgTq7e12yKxb=s900-c-k-c0x00ffffff-no-rj', 'https://th.bing.com/th/id/OIP.byu4wb3Ag5IKYqZcJT_eXwHaHa?w=683&h=683&rs=1&pid=ImgDetMain', 'https://th.bing.com/th/id/R.6007a8c23db45c36488bfa7a0035d090?rik=y7ZfdfdUUiPaaw&pid=ImgRaw&r=0', 'https://cdnphoto.dantri.com.vn/ecdPkKw4WCg-NR0Zi2shwRYyUlo=/thumb_w/1020/2022/11/10/micheal-jackson-1668044313441.jpg', 'https://media.vov.vn/sites/default/files/styles/large/public/2021-08/image_7.jpeg.jpg', 'https://yt3.googleusercontent.com/gam065jhT3tmDHVFglA846lO0oNHImdty7Vw2ATuWOzcamMWmsNYzVqrmtlWX1egn6BKYq__Mw=s900-c-k-c0x00ffffff-no-rj');
+                        $img_i = rand(0, count($img) - 1);
+                        echo '<img src="'. $img[$img_i] .'" class="img-fluid rounded shadow-sm" alt="Image">';
+                        ?>
+                        </div>
 
                     <!-- Thông tin nghệ sĩ -->
                     <div class="col-md-6">

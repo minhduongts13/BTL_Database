@@ -9,20 +9,10 @@
     <link rel="stylesheet" href="./assets/css/responsive.css">
     <link rel="stylesheet" href="./assets/css/advertisers.css">
     <link rel="icon" type="image/x-icon" href="/assets/image/icon/album1989tv.jpg">
-    <title>Advertisers</title>
+    <title>Quảng cáo</title>
     <?php include("auth.php") ?>
 </head>
 
-<script>
-    function toggle() {
-        const filterButton =document.querySelector("#filter_button");
-        if (filterButton.innerHTML === "Chỉ xem các hợp đồng có hiệu lực") {
-            filterButton.innerHTML = "Xem tất cả các hợp đồng";
-        } else {
-            filterButton.innerHTML = "Chỉ xem các hợp đồng có hiệu lực";
-        }
-    }
-</script>
 
 <body class="bg-black">
 
@@ -66,6 +56,11 @@
             </div>
 
             <div>
+                <div class="col-md-12 text-center mt-4">
+                    <img src="./assets/image/slider/potato.png" class="img-fluid rounded shadow-sm" alt="Image">
+                </div>
+
+
                 <?php
                     $idContract = $_GET['idCon'];
 
@@ -156,6 +151,13 @@
                         ";
                     }
                 ?>
+
+                <div class="mt-3 d-flex justify-content-center">
+                    <a href="advertisement_list.php">
+                        <button class="btn btn-light">Quay lại</button>
+                    </a>
+                </div>
+
             </div>
         </div>
     </div>
