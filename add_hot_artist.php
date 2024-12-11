@@ -9,38 +9,10 @@
     <link rel="stylesheet" href="./assets/css/responsive.css">
     <link rel="icon" type="image/x-icon" href="/assets/image/icon/album1989tv.jpg">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <title>Advertisers</title>
+    <title>Thêm nghệ sĩ</title>
 </head>
 
-<script>
-    function findAdvertiser(id) {
-        if (id == "") {
-            $("#name-advertiser").prop('readonly', false);
-            $("#description-advertiser").prop('readonly', false);
-            $("#name-advertiser").val('');
-            $("#description-advertiser").val('');
-        } else 
-        $.ajax({
-            type: "GET",
-            url: "advertisers_action\\findAds.php",
-            data: "idAd="+id,
-            success: function(result) {
-                console.log(result);
-                if (result != "empty") {
-                    const response = JSON.parse(result);
-                    $("#name-advertiser").val(response.name);
-                    $("#name-advertiser").prop('readonly', true);
-                    $("#description-advertiser").val(response.des);
-                    $("#description-advertiser").prop('readonly', true);
-                } else {
-                    $("#name-advertiser").val("");
-                    $("#description-advertiser").val("");
-                }
-            }
-        })
-    }
 
-</script>
 
 <body class="bg-black">
     <div class="header container-fluid border-bottom-0 d-flex align-items-center bg-black fixed-top py-3 px-4 shadow-lg">
@@ -103,7 +75,7 @@
                 </div>
 
                 <div class='mt-3 d-flex justify-content-center'>
-                    <input type='submit' class='btn btn-primary'>
+                    <button type='submit' class='btn btn-primary'>Thêm</button>
                 </div> 
             </form>"
             ?>

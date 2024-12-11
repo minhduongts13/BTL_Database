@@ -11,7 +11,7 @@
     <link rel="icon" type="image/x-icon" href="/assets/image/icon/album1989tv.jpg">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <title>Advertisers</title>
-    <?php include("../auth/php"); ?>
+    <?php include("auth.php"); ?>
 </head>
 
 <body class="bg-black">
@@ -51,28 +51,24 @@
     <div class="card bg-dark text-white shadow-lg d-flex container" style="margin-top: 150px">
         
         <?php
-            include '../connect.php';
-
+            $idCom = $_GET['idCom'];
             $name = $_POST['advertiser_name'];
             $des = $_POST['description'];
-            
-            $statement = $db->prepare("SELECT addAdvertiser('$name', '$des')");
-            $statement->execute();
 
+            include 'connect.php';
+            $statement = $db->prepare("SELECT modifyAdvertiser($idCom, '$name', '$des')");
+            $statement->execute();
             $result = $statement->fetch();
-            $str = $result[0];
             echo "
-                <div class='mt-3 d-flex justify-content-center'>
-                    $str
-                </div>
-            ";
+            <div class='mt-3 d-flex justify-content-center'>$result[0]</div>
+            "
         ?>
+
         <div class='mt-3 d-flex justify-content-center'>
             <a href="../advertiser_list.php">
                 <button class="btn btn-light">Quay lại</button>
             </a>
         </div>
-
     </div>
 </body>
 </html>

@@ -10,11 +10,24 @@
     <link rel="stylesheet" href="./assets/css/advertisers.css">
     <link rel="icon" type="image/x-icon" href="/assets/image/icon/album1989tv.jpg">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <title>Advertisers</title>
-    <?php include("../auth/php"); ?>
+    <title>Nhà quảng cáo</title>
+    <?php include("auth.php") ?>
 </head>
 
+<script>
+    $(document).ready(function() {
+        $("#addAdvertiser").click(function () {
+            $("#song-description").load('advertiser_add.php');
+        })
+    })
+
+    function detailsAdvertiser(index) {
+        $("#song-description").load('advertiser.php?idAds=' + index);
+    }
+</script>
+
 <body class="bg-black">
+
     <div class="header container-fluid border-bottom-0 d-flex align-items-center bg-black fixed-top py-3 px-4 shadow-lg">
         <!-- Tiêu đề -->
         <a href="homePage.php" class="text-decoration-none">
@@ -48,26 +61,57 @@
         </div>
     </div>
 
-    <div class="card bg-dark text-white shadow-lg d-flex container" style="margin-top: 150px">
-        
-        <?php
-            $idCom = $_GET['idCom'];
-            $name = $_POST['advertiser_name'];
-            $des = $_POST['description'];
+    <div id="song-description" class="container">
+        <div class="card bg-dark text-white shadow-lg">
+            <div class="bg-success bg-gradient p-2">
+                <h2 class="card-title text-center text-uppercase mb-0">NHÀ QUẢNG CÁO</h2>
+            </div>
 
-            include '../connect.php';
-            $statement = $db->prepare("SELECT modifyAdvertiser($idCom, '$name', '$des')");
-            $statement->execute();
-            $result = $statement->fetch();
-            echo "
-            <div class='mt-3 d-flex justify-content-center'>$result[0]</div>
-            "
-        ?>
+            <div>            
+                <div class="mt-3 d-flex justify-content-center">
+                    <button class="btn btn-success" id="addAdvertiser">Thêm nhà quảng cáo</button>
+                </div>
 
-        <div class='mt-3 d-flex justify-content-center'>
-            <a href="../advertiser_list.php">
-                <button class="btn btn-light">Quay lại</button>
-            </a>
+            </div>
+
+            <table class="table table-bordered table-hover table-responsive-lg mt-3">
+                <thead class="table-success">
+                    <tr>
+                        <th scope="col" class="center width10">STT</th>
+                        <th scope="col" class="center width70">NHÀ QUẢNG CÁO</th>
+                        <th scope="col" class="center width20">CHI TIẾT</th>
+                    </tr>
+                </thead>
+
+                <tbody class="table-dark">
+
+                    <?php
+                        include "connect.php";
+
+                        $statement = $db->prepare("CALL getAllAdvertisers()");
+                       
+                        $statement->execute();
+                        $result = $statement->fetchAll();
+    
+                        for ($i = 0; $i < count($result); $i++) {
+                            $idAdvertiser = $result[$i]['ID'];
+                            $name = $result[$i]['Ten_don_vi_quang_cao'];
+                            $j = $i + 1;
+                            echo "
+                                <tr>
+                                    <th scope='row' class='center width10'>$j</th>
+                                    <td class='width70'>$name</td>
+                                    <td class='center width20'>
+                                        <a href='#' onclick='detailsAdvertiser($idAdvertiser); event.preventDefault();'>Chi tiết</a>
+                                    </td>
+                                </tr>
+                            ";
+                        }
+                    ?>
+
+                </tbody>
+            </table>
+
         </div>
     </div>
 </body>

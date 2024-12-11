@@ -7,12 +7,10 @@
     <link rel="stylesheet" href="./assets/fonts/themify-icons/themify-icons.css">
     <link rel="stylesheet" href="./assets/css/song_page.css">
     <link rel="stylesheet" href="./assets/css/responsive.css">
-    <link rel="stylesheet" href="./assets/css/advertisers.css">
     <link rel="icon" type="image/x-icon" href="/assets/image/icon/album1989tv.jpg">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <title>Advertisers</title>
-    <?php include("../auth/php"); ?>
-
+    <title>Thêm nhà quảng cáo</title>
+    <?php include("auth.php") ?>
 </head>
 
 <body class="bg-black">
@@ -49,29 +47,60 @@
         </div>
     </div>
 
-    <div class="card bg-dark text-white shadow-lg d-flex container" style="margin-top: 150px">
-        
-        <?php
-            include '../connect.php';
+    <div id="song-description" class="container">
+        <div class="card bg-dark text-white shadow-lg">
+            <div class="bg-success bg-gradient p-2">
+                <h2 class="card-title text-center text-uppercase mb-0">THÊM NHÀ QUẢNG CÁO</h2>
+            </div>
 
-            $advertiser = $_POST['ads_name'];
-            
-            $start = strtotime($_POST['start_date']);
-            $start = date('Y-m-d', $start);
-            
-            $end = strtotime($_POST['end_date']);
-            $end = date('Y-m-d', $end);
+            <form method="post" action="advertiser_add.php" id="addNewContract">
 
-            $type = $_POST['type'];
-            $statement = $db->prepare("SELECT addAdvertisement('$advertiser', '$start', '$end', '$type')");
-            $statement->execute();
-            $result = $statement->fetch();
-            echo $result;
-        ?>
-        <a href="advertisers.php">
-            <button class="btn btn-light">Quay lại</button>
-        </a>
+                <div class="form-group row mt-2">
+                    <label for="name-advertiser" class="col-sm-2 col-form-label">Tên nhà quảng cáo</label>
+                    <div class="col-8 col-md-6">
+                        <input type="text" class="form-control" id="name-advertiser" placeholder="Nhập tên nhà quảng cáo" name="advertiser_name" required>
+                    </div>
+                </div>
 
+                <div class="form-group row mt-2">
+                    <label for="description-advertiser" class="col-sm-2 col-form-label">Mô tả nhà quảng cáo</label>
+                    <div class="col-8 col-md-6">
+                        <textarea class="form-control" id="description-advertiser" placeholder="Nhập mô tả nhà quảng cáo" name="description" rows="5"></textarea>
+                    </div>
+                </div>                
+
+                <div class="form-group row mt-2 d-flex justify-content-center">
+                    <button class="btn btn-primary col-2 col-md-1" type="submit">Thêm</button>
+                </div>
+            </form>
+
+            <?php
+                include 'connect.php';
+
+                if (isset($_POST['advertiser_name']) && isset($_POST['description'])) {
+                    $name = $_POST['advertiser_name'];
+                    $des = $_POST['description'];
+                    
+                    $statement = $db->prepare("SELECT addAdvertiser('$name', '$des')");
+                    $statement->execute();
+
+                    $result = $statement->fetch();
+                    $str = $result[0];
+                    echo "
+                        <div class='mt-3 d-flex justify-content-center'>
+                            $str
+                        </div>
+                    ";
+                } else {
+                    echo "<div></div>";
+                }
+            ?>
+
+            <div class="mt-3 d-flex justify-content-center">
+                <a href="advertiser_list.php">
+                <button class="btn btn-light">Quay lại danh sách nhà quảng cáo</button>
+                </a>
+            </div>
     </div>
 </body>
 </html>

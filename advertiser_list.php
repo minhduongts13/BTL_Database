@@ -9,18 +9,19 @@
     <link rel="stylesheet" href="./assets/css/responsive.css">
     <link rel="stylesheet" href="./assets/css/advertisers.css">
     <link rel="icon" type="image/x-icon" href="/assets/image/icon/album1989tv.jpg">
-    <title>Advertisers</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <title>Nhà quảng cáo</title>
     <?php include("auth.php") ?>
 </head>
 
 <script>
-    function toggle() {
-        const filterButton =document.querySelector("#filter_button");
-        if (filterButton.innerHTML === "Chỉ xem các hợp đồng có hiệu lực") {
-            filterButton.innerHTML = "Xem tất cả các hợp đồng";
-        } else {
-            filterButton.innerHTML = "Chỉ xem các hợp đồng có hiệu lực";
-        }
+
+    function detailsAdvertiser(index) {
+        $("#song-description").load('advertiser.php?idAds=' + index);
+    }
+
+    function addNewAdvertiser() {
+        $("#song-description").load('advertiser_add.php');
     }
 </script>
 
@@ -67,9 +68,7 @@
 
             <div>            
                 <div class="mt-3 d-flex justify-content-center">
-                    <a href="advertiser_add.php">
-                    <button class="btn btn-success">Thêm nhà quảng cáo</button>
-                    </a>
+                    <button class="btn btn-success" onclick="addNewAdvertiser()">Thêm nhà quảng cáo</button>
                 </div>
 
             </div>
@@ -102,9 +101,7 @@
                                     <th scope='row' class='center width10'>$j</th>
                                     <td class='width70'>$name</td>
                                     <td class='center width20'>
-                                        <a href='advertiser.php?idAds=$idAdvertiser'>
-                                            Chi tiết
-                                        </a>
+                                        <a href='#' onclick='detailsAdvertiser($idAdvertiser); event.preventDefault();'>Chi tiết</a>
                                     </td>
                                 </tr>
                             ";
