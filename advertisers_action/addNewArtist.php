@@ -61,6 +61,12 @@
                 echo $result[0];
             ?>
         </div>
+
+        <div class="mt-3 d-flex justify-content-center">
+            <a href="../advertisement_list.php">
+                <button class="btn btn-light">Quay lại</button>
+            </a>
+        </div>
     </div>
 </body>
 </html>

@@ -17,11 +17,11 @@
 <script>
 
     function detailsAdvertiser(index) {
-        $("#song-description").load('advertiser.php?idAds=' + index);
+        $("#song-description").load('advertiser_without_footer.php?idAds=' + index);
     }
 
     function addNewAdvertiser() {
-        $("#song-description").load('advertiser_add.php');
+        $("#song-description").load('advertiser_add_without_footer.php');
     }
 </script>
 
@@ -60,7 +60,7 @@
         </div>
     </div>
 
-    <div id="song-description" class="container">
+    <div id="song-description" class="container min-vh-100">
         <div class="card bg-dark text-white shadow-lg">
             <div class="bg-success bg-gradient p-2">
                 <h2 class="card-title text-center text-uppercase mb-0">NHÀ QUẢNG CÁO</h2>

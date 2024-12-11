@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="./assets/css/responsive.css">
     <link rel="stylesheet" href="./assets/css/advertisers.css">
     <link rel="icon" type="image/x-icon" href="/assets/image/icon/album1989tv.jpg">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <title>Nhà quảng cáo</title>
     <?php include("auth.php") ?>
     <script>
@@ -61,7 +62,7 @@
         </div>
     </div>
 
-    <div id="song-description" class="container">
+    <div id="song-description" class="container min-vh-100">
         <div class="card bg-dark text-white shadow-lg">
             <div class="bg-success bg-gradient p-2">
                 <h2 class="card-title text-center text-uppercase mb-0">NHÀ QUẢNG CÁO</h2>
@@ -101,12 +102,47 @@
                     </div>
 
                     <div class='mt-3 d-flex justify-content-center'>
-                        <button class='btn btn-light' id='returnListAdvertiser'>Quay lại</button>
+                        <a href='advertiser_list.php'>
+                        <button class='btn btn-light'>Quay lại</button>
+                        </a>
                     </div>
                     ";
                 ?>
             </div>
         </div>
     </div>
+
+    <div id="footer" class="bg-black mt-2 text-light border-top border-white">
+        <div class="row">
+            <div class="col-4">
+                <div class="d-flex justify-content-center">
+                    <a href="homePage.php">
+                            <img src="./assets/image/icon/logo.png" alt="">   
+                        </a>   
+                </div>
+                <div class="socials-list d-flex justify-content-center mt-1">
+                    <a href=""><i class="ti-facebook text-light me-1"></i></a>
+                    <a href=""><i class="ti-instagram text-light me-1"></i></a>
+                    <a href=""><i class="ti-linux text-light me-1"></i></a>
+                    <a href=""><i class="ti-pinterest text-light me-1"></i></a>
+                    <a href=""><i class="ti-twitter text-light me-1"></i></a>
+                    <a href=""><i class="ti-linkedin text-light"></i></a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <p class="fw-bold fs-3">Liên Hệ</p>
+                <p> <i class="ti-location-pin"></i> Số 123, Đường ABS, Thành phố XYZ</p>
+                <p> <i class="ti-mobile"></i> Phone: <a href="tel:+00151515">0123456789</a></p>
+                <p> <i class="ti-email"></i> Email: <a href="mailto:quangminh4141@gmail.com">Spoticon@mail.com</a></p>
+            </div>
+            <div class="col-md-4">
+                <p class="fw-bold fs-3">Hỗ Trợ</p>
+                <p>Điều khoản và Dịch vụ</p>
+                <p>Chính sách</p>
+                <p>Về chúng tôi</p>
+            </div>    
+        </div>
+    </div>
+
 </body>
 </html>
